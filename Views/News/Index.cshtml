@@ -1,64 +1,72 @@
-﻿@model IEnumerable<App.Admin.ViewModels.AdminUser>
+﻿@model IEnumerable<App.Admin.Models.News>
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
+
 <div style="margin-left:5%;margin-right:5%">
-	<h1>Admins</h1>
+	<h1>News</h1>
 
 	<p>
-		<a class="btn btn-info" asp-action="Create">Create New</a>
+		<a asp-action="Create">Create New</a>
 	</p>
+
 	<table class="table">
 		<thead>
 		@Html.AntiForgeryToken()
 		<tr>
 			<th>
-				@Html.DisplayNameFor(model => model.Name)
+				@Html.DisplayNameFor(model => model.Title)
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.Email)
+				@Html.DisplayNameFor(model => model.CoverImagePath)
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.Mobile)
+				@Html.DisplayNameFor(model => model.ContentEn)
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.IsRoot)
+				@Html.DisplayNameFor(model => model.ContentAr)
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.CreationDate)
+				@Html.DisplayNameFor(model => model.DatePublished)
 			</th>
 			<th></th>
 		</tr>
 		</thead>
 		<tbody>
-		@foreach (var item in Model) {
+		@foreach (var item in Model)
+		{
 			<tr>
 				<td>
-					@Html.DisplayFor(modelItem => item.Name)
+					@Html.DisplayFor(modelItem => item.Title)
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.Email)
+					<img src="@Url.Content("~/" + item.CoverImagePath)" alt="Image" style="border-radius: 50%; overflow: hidden; width: 50px; height: 50px;"/>
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.Mobile)
+					@{
+						string truncatedContent = item.ContentEn.Length > 50 ? item.ContentEn.Substring(0, 50) + "..." : item.ContentEn;
+					}
+					@truncatedContent
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.IsRoot)
+					@{
+						string truncatedContentAr = item.ContentAr.Length > 50 ? item.ContentAr.Substring(0, 50) + "..." : item.ContentAr;
+					}
+					@truncatedContentAr
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.CreationDate)
+					@Html.DisplayFor(modelItem => item.DatePublished)
 				</td>
 				<td>
 					<a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-info">Edit</a> |
-					<a class="btn btn-danger delete-button" data-toggle="modal" data-target="#deleteModal" data-item-id="@item.Id" data-item-name="@item.Name">Delete</a>
+					<a class="btn btn-danger delete-button" data-toggle="modal" data-target="#deleteModal" data-item-id="@item.Id" data-item-name="@item.Title">Delete</a>
 				</td>
 			</tr>
 		}
 		</tbody>
 	</table>
-
 	<div id="deleteModal" class="modal fade" tabindex="-1" role="dialog">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
@@ -69,8 +77,8 @@
 					</button>
 				</div>
 				<div class="modal-body">
-					<p>Are you sure you want to delete this admin?</p>
-					<p>Admin Name: <span id="itemName"></span></p>
+					<p>Are you sure you want to delete News ?</p>
+					<p>News Title: <span id="itemName"></span></p>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
@@ -81,9 +89,8 @@
 	</div>
 </div>
 
-
 @section Scripts {
-    <script>
+	<script>
         $(document).ready(function () {
             $('.delete-button').on('click', function () {
                 var itemName = $(this).data('item-name');
@@ -98,7 +105,7 @@
                 var itemId = $(this).data('item-id');
 
                 $.ajax({
-                    url: '/admin/delete/'+itemId, 
+                    url: '/news/delete/'+itemId, 
                     type: 'POST',                    
 					headers: {
 						RequestVerificationToken: $('input[name="__RequestVerificationToken"]').val()

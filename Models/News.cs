@@ -9,9 +9,15 @@ public class News
 
     public string Title { get; set; }
 
+    [Display(Name="Cover Image")]
     public string CoverImagePath { get; set; }
 
-    public string Content { get; set; }
+    [Display(Name = "English Content")]
+    public string ContentEn { get; set; }
 
-    public DateTime DatePublished { get; set; } = DateTime.Now;
+    [Display(Name = "Arabic Content")]
+	public string ContentAr { get; set; }
+
+	[Display(Name = "Published Date")]
+	public DateTime DatePublished { get; set; } = DateTime.Now;
 }

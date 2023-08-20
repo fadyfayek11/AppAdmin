@@ -9,55 +9,43 @@ namespace App.Admin.Controllers
     public class AdminsController : Controller
     {
         private readonly IdentityContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+		public AdminsController(IdentityContext context, UserManager<ApplicationUser> userManager)
+		{
+			_context = context;
+			_userManager = userManager;
+		}
 
-        public AdminsController(IdentityContext context)
-        {
-            _context = context;
-        }
-
-        // GET: Admins
         public async Task<IActionResult> Index()
         {
-	        var admins = await _context.Admins.Include(x=>x.User).Select(x=> new AdminUser
-            {
-                Id = x.User.Id,
-                Name = x.User.UserName,
-                Email = x.User.Email,
-                Mobile = x.User.PhoneNumber,
-                CreationDate = x.CreatedDate,
-                IsRoot = x.IsRoot,
-            }).ToListAsync();
+			var currentUser = await _userManager.GetUserAsync(User);
 
-           return View(admins);
-        }
+			if (currentUser != null)
+			{
+				var admins = await _context.Admins.Include(x => x.User).Where(x => x.User.Id != currentUser.Id).Select(x => new AdminUser
+				{
+					Id = x.User.Id,
+					Name = x.User.UserName,
+					Email = x.User.Email,
+					Mobile = x.User.PhoneNumber,
+					CreationDate = x.CreatedDate,
+					IsRoot = x.IsRoot,
+				}).ToListAsync();
 
-        // GET: Admins/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Admins == null)
-            {
-                return NotFound();
-            }
+				return View(admins);
+			}
 
-            var admin = await _context.Admins
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (admin == null)
-            {
-                return NotFound();
-            }
+			return LocalRedirect("/Account/Login");
+		}
 
-            return View(admin);
-        }
+        
 
-        // GET: Admins/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: Admins/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(AdminUser admin)
@@ -74,8 +62,11 @@ namespace App.Admin.Controllers
                     PhoneNumber = admin.Mobile,
                     PasswordHash = hasher.HashPassword(null, admin.Password)
                 };
-                await _context.Users.AddAsync(user);
-                await _context.Admins.AddAsync(new Models.Admin
+
+				await _userManager.CreateAsync(user);
+				await _userManager.AddToRoleAsync(user,admin.IsRoot? "RootAdmin" : "Admin");
+
+				await _context.Admins.AddAsync(new Models.Admin
                 { 
                     IsRoot = admin.IsRoot,
                     CreatedDate = DateTime.Now,
@@ -89,35 +80,40 @@ namespace App.Admin.Controllers
                 }
                 catch (Exception e)
                 {
-                    throw;
+					return View(admin); 
                 }
                 return RedirectToAction(nameof(Index));
             }
             return View(admin);
         }
 
-        // GET: Admins/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(string? id)
         {
             if (id == null || _context.Admins == null)
             {
                 return NotFound();
             }
 
-            var admin = await _context.Admins.FindAsync(id);
-            if (admin == null)
+			var admin = await _context.Admins.Include(x => x.User).Select(x => new AdminUser
+			{
+				Id = x.User.Id,
+				Name = x.User.UserName,
+				Email = x.User.Email,
+				Mobile = x.User.PhoneNumber,
+				CreationDate = x.CreatedDate,
+				IsRoot = x.IsRoot,
+			}).Where(x=>x.Id == id).FirstOrDefaultAsync();
+			if (admin == null)
             {
                 return NotFound();
             }
             return View(admin);
         }
 
-        // POST: Admins/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,IsRoot,CreatedDate")] Models.Admin admin)
+        public async Task<IActionResult> Edit(string id, AdminUser admin)
         {
             if (id != admin.Id)
             {
@@ -128,7 +124,23 @@ namespace App.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(admin);
+	                var adminUser = await _context.Admins.Include(x => x.User).FirstOrDefaultAsync(x => x.User.Id == id);
+                   
+	                if(adminUser is null) return NotFound();
+                    adminUser.IsRoot = admin.IsRoot;
+
+                    _context.Admins.Update(adminUser);
+
+                    var hasher = new PasswordHasher<ApplicationUser>();
+
+                    adminUser.User.Email = admin.Email;
+                    adminUser.User.NormalizedEmail = admin.Email.ToUpper();
+                    adminUser.User.PhoneNumber = admin.Mobile;
+                    adminUser.User.UserName = admin.Name;
+                    adminUser.User.NormalizedEmail = admin.Name.ToUpper();
+                    adminUser.User.PasswordHash = string.IsNullOrEmpty(admin.Password) ? adminUser.User.PasswordHash : admin.Password;
+
+                    _context.Users.Update(adminUser.User);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -147,46 +159,29 @@ namespace App.Admin.Controllers
             return View(admin);
         }
 
-        // GET: Admins/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Admins == null)
-            {
-                return NotFound();
-            }
-
-            var admin = await _context.Admins
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (admin == null)
-            {
-                return NotFound();
-            }
-
-            return View(admin);
-        }
-
-        // POST: Admins/Delete/5
+        
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(string id)
         {
             if (_context.Admins == null)
             {
-                return Problem("Entity set 'IdentityContext.Admins'  is null.");
+                return Json(new { success = false });
             }
-            var admin = await _context.Admins.FindAsync(id);
+            var admin = await _context.Admins.Include(x=>x.User).Where(x=>x.User.Id == id).FirstOrDefaultAsync();
             if (admin != null)
             {
                 _context.Admins.Remove(admin);
+                _context.Users.Remove(admin.User);
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return Json(new { success = true });
         }
 
-        private bool AdminExists(int id)
+        private bool AdminExists(string id)
         {
-          return (_context.Admins?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.Users?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

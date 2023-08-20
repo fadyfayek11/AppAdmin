@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="/assets/css/style.css" />
     <link rel="stylesheet" href="/assets/css/custom-css.css" />
     <link rel="shortcut icon" href="/assets/images/favicon.png" />
+
 </head>
 <body>
     <div class="container-scroller">
@@ -51,74 +52,79 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/index.html">
+                    <a class="nav-link" href="/">
                         <i class="mdi mdi-home menu-icon"></i>
                         <span class="menu-title">Dashboard</span>
                     </a>
                 </li>
+	           
+                @if (UserManager.IsInRoleAsync(await UserManager.GetUserAsync(User), "RootAdmin").Result)
+                {
+	                <li class="nav-item">
+		                <a class="nav-link" asp-controller="Admins" asp-action="Index">
+                            <i class="fa-solid fa-user-shield menu-icon"></i>
+			                <span class="menu-title">Admins</span>
+		                </a>
+	                </li>
+                }
                 <li class="nav-item">
-                    <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
-                        <i class="mdi mdi-crosshairs-gps menu-icon"></i>
-                        <span class="menu-title">Basic UI Elements</span>
-                        <i class="menu-arrow"></i>
-                    </a>
-                    <div class="collapse" id="ui-basic">
-                        <ul class="nav flex-column sub-menu">
-                            <li class="nav-item">
-                                <a class="nav-link" href="/pages/ui-features/buttons.html">Buttons</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/pages/ui-features/dropdowns.html">Dropdowns</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="/pages/ui-features/typography.html">Typography</a>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" asp-controller="Admins" asp-action="Index">
-                        <i class="mdi mdi-contacts menu-icon"></i>
-                        <span class="menu-title">Icons</span>
-                    </a>
+	                <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+                        <i class="fa-solid fa-bed menu-icon"></i>
+		                <span class="menu-title">Rooms</span>
+		                <i class="menu-arrow"></i>
+	                </a>
+	                <div class="collapse" id="ui-basic">
+		                <ul class="nav flex-column sub-menu">
+			                <li class="nav-item">
+				                <a class="nav-link" href="/pages/ui-features/buttons.html">Buttons</a>
+			                </li>
+			                <li class="nav-item">
+				                <a class="nav-link" href="/pages/ui-features/dropdowns.html">Dropdowns</a>
+			                </li>
+			                <li class="nav-item">
+				                <a class="nav-link" href="/pages/ui-features/typography.html">Typography</a>
+			                </li>
+		                </ul>
+	                </div>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="/pages/forms/basic_elements.html">
-                        <i class="mdi mdi-format-list-bulleted menu-icon"></i>
-                        <span class="menu-title">Forms</span>
+                        <i class="fa-solid fa-people-group menu-icon"></i>
+                        <span class="menu-title">Our Team</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/pages/charts/chartjs.html">
-                        <i class="mdi mdi-chart-bar menu-icon"></i>
-                        <span class="menu-title">Charts</span>
+                    <a class="nav-link" asp-controller="News" asp-action="Index">
+                        <i class="fa-solid fa-newspaper menu-icon"></i>
+                        <span class="menu-title">News</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/pages/tables/basic-table.html">
-                        <i class="mdi mdi-table-large menu-icon"></i>
-                        <span class="menu-title">Tables</span>
-                    </a>
+	                <a class="nav-link" href="/pages/tables/basic-table.html">
+		                <i class="fa-solid fa-magnifying-glass-chart menu-icon"></i>
+		                <span class="menu-title">Reservations</span>
+	                </a>
                 </li>
-                <li class="nav-item">
-                    <span class="nav-link" href="#">
-                        <span class="menu-title">Docs</span>
-                    </span>
-                </li>
+
                 <li class="nav-item">
                     <a class="nav-link" href="https://www.bootstrapdash.com/demo/breeze-free/documentation/documentation.html">
-                        <i class="mdi mdi-file-document-box menu-icon"></i>
-                        <span class="menu-title">Documentation</span>
+                        <i class="fa-regular fa-comment-dots  menu-icon"></i>
+                        <span class="menu-title">Testimony</span>
                     </a>
                 </li>
                 <li class="nav-item sidebar-actions">
                     <div class="nav-link">
                         <div class="mt-4">
-                            <div class="border-none">
-                                <p class="text-black">Notification</p>
-                            </div>
+	                        <div class="border-none">
+                                <i class="fa-solid fa-user-gear  menu-icon"></i>
+		                        <span class="text-black">Setting</span>
+	                        </div>
                             <ul class="mt-4 pl-0">
-                                <li><a asp-page="/Account/Logout" asp-route-returnUrl="/Account/Login"></a>Sign Out</li>
+	                            <li>
+		                            <a asp-page="/Account/Logout" asp-route-returnUrl="/Account/Login" style="text-decoration:none">
+                                        <i class="mdi mdi-logout mr-2" style="color:black"></i> <span class="text-black">Sign out</span>
+                                    </a>
+	                            </li>
                             </ul>
                         </div>
                     </div>
@@ -198,7 +204,7 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
+	<script src="https://kit.fontawesome.com/4a8137dc1d.js" crossorigin="anonymous"></script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
