@@ -88,7 +88,7 @@
 	                </div>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/pages/forms/basic_elements.html">
+                    <a class="nav-link" asp-controller="CMS" asp-action="Index">
                         <i class="fa-solid fa-people-group menu-icon"></i>
                         <span class="menu-title">Our Team</span>
                     </a>
@@ -206,5 +206,6 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
 	<script src="https://kit.fontawesome.com/4a8137dc1d.js" crossorigin="anonymous"></script>
     @await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Styles", required: false)
 </body>
 </html>

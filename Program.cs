@@ -70,7 +70,16 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllerRoute(
         name: "news",
         pattern: "news/{action}/{news?}",
-        defaults: new { controller = "News" });
+        defaults: new { controller = "News" }); 
+    
+    endpoints.MapControllerRoute(
+        name: "cms",
+        pattern: "cms/{action}/{id?}",
+        defaults: new { controller = "CMS" }); 
+    endpoints.MapControllerRoute(
+        name: "cms",
+        pattern: "cms/{action}/{cms?}",
+        defaults: new { controller = "CMS" });
 });
 
 app.Run();
