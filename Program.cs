@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 builder.Services.AddDbContext<IdentityContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -42,5 +43,17 @@ app.UseAuthentication(); ;
 app.UseAuthorization();
 
 app.MapRazorPages();
+app.UseEndpoints(endpoints =>
+{
+
+    endpoints.MapControllerRoute(
+        name: "admin",
+        pattern: "admin/{action}/{id?}",
+        defaults: new { controller = "Admins" }); 
+    endpoints.MapControllerRoute(
+        name: "admin",
+        pattern: "admin/{action}/{admin?}",
+        defaults: new { controller = "Admins" });
+});
 
 app.Run();
