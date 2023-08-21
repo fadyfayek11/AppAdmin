@@ -31,25 +31,7 @@ namespace App.Admin.Controllers
                           Problem("Entity set 'IdentityContext.Cmses'  is null.");
         }
 
-        // GET: CMS/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.Cmses == null)
-            {
-                return NotFound();
-            }
-
-            var cMS = await _context.Cmses
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (cMS == null)
-            {
-                return NotFound();
-            }
-
-            return View(cMS);
-        }
-
-        // GET: CMS/Create
+       
         public IActionResult Create()
         {
             return View();
@@ -57,7 +39,7 @@ namespace App.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(ImagesModel images)
+        public async Task<IActionResult> Create([FromForm] ImagesModel images)
         {
             if (ModelState.IsValid)
             {
@@ -97,72 +79,7 @@ namespace App.Admin.Controllers
             return View(images);
         }
 
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Cmses == null)
-            {
-                return NotFound();
-            }
-
-            var cMS = await _context.Cmses.FindAsync(id);
-            if (cMS == null)
-            {
-                return NotFound();
-            }
-            return View(cMS);
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Key,Value")] CMS cMS)
-        {
-            if (id != cMS.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(cMS);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!CMSExists(cMS.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(cMS);
-        }
-
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Cmses == null)
-            {
-                return NotFound();
-            }
-
-            var cMS = await _context.Cmses
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (cMS == null)
-            {
-                return NotFound();
-            }
-
-            return View(cMS);
-        }
-
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.Cmses == null)

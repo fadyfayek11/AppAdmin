@@ -4,6 +4,6 @@ namespace App.Admin.ViewModels;
 
 public class ImagesModel
 {
-    public string Key { get; set; } = "OurTeam";
+    public string Key { get; set; }
     public List<IFormFile> Images { get; set; }
 }
