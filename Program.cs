@@ -79,7 +79,52 @@ app.UseEndpoints(endpoints =>
     endpoints.MapControllerRoute(
         name: "cms",
         pattern: "cms/{action}/{cms?}",
-        defaults: new { controller = "CMS" });
+        defaults: new { controller = "CMS" }); 
+    
+    endpoints.MapControllerRoute(
+        name: "room",
+        pattern: "room/{action}/{id?}",
+        defaults: new { controller = "Rooms" }); 
+    endpoints.MapControllerRoute(
+        name: "room",
+        pattern: "room/{action}/{room?}",
+        defaults: new { controller = "Rooms" });
+    
+    endpoints.MapControllerRoute(
+        name: "reservation",
+        pattern: "reservation/{action}/{id?}",
+        defaults: new { controller = "Reservations" }); 
+    endpoints.MapControllerRoute(
+        name: "reservation",
+        pattern: "reservation/{action}/{reservation?}",
+        defaults: new { controller = "Reservations" });
+    
+    endpoints.MapControllerRoute(
+        name: "testimonies",
+        pattern: "testimonies/{action}/{id?}",
+        defaults: new { controller = "Testimonies" }); 
+    endpoints.MapControllerRoute(
+        name: "testimonies",
+        pattern: "testimonies/{action}/{testimonies?}",
+        defaults: new { controller = "Testimonies" });
+    
+    endpoints.MapControllerRoute(
+        name: "roomDetails",
+        pattern: "roomDetails/{action}/{id?}",
+        defaults: new { controller = "RoomDetails" }); 
+    endpoints.MapControllerRoute(
+        name: "roomDetails",
+        pattern: "roomDetails/{action}/{details?}",
+        defaults: new { controller = "RoomDetails" });
+    
+    endpoints.MapControllerRoute(
+        name: "roomImages",
+        pattern: "roomImages/{action}/{id?}",
+        defaults: new { controller = "RoomImages" }); 
+    endpoints.MapControllerRoute(
+        name: "roomImages",
+        pattern: "roomImages/{action}/{images?}",
+        defaults: new { controller = "RoomImages" });
 });
 
 app.Run();

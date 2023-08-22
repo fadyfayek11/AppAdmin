@@ -13,4 +13,8 @@ public class Reservation
     public ReservationStatus Status { get; set; }
     public DateTime Date { get; set; }
     public DateTime CreatedDate { get; set; } = DateTime.Now;
+    public int RoomId { get; set; }
+
+    // Navigation property
+    public virtual Room Room { get; set; }
 }

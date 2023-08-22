@@ -19,6 +19,7 @@
     <link rel="stylesheet" href="/assets/vendors/select2-bootstrap-theme/select2-bootstrap.min.css" />
     <link rel="stylesheet" href="/assets/css/style.css" />
     <link rel="stylesheet" href="/assets/css/custom-css.css" />
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
     <link rel="shortcut icon" href="/assets/images/favicon.png" />
 
 </head>
@@ -68,7 +69,7 @@
 	                </li>
                 }
                 <li class="nav-item">
-	                <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+	                <a class="nav-link" data-toggle="collapse" aria-expanded="false" href="#ui-basic" aria-controls="ui-basic">
                         <i class="fa-solid fa-bed menu-icon"></i>
 		                <span class="menu-title">Rooms</span>
 		                <i class="menu-arrow"></i>
@@ -76,13 +77,13 @@
 	                <div class="collapse" id="ui-basic">
 		                <ul class="nav flex-column sub-menu">
 			                <li class="nav-item">
-				                <a class="nav-link" href="/pages/ui-features/buttons.html">Buttons</a>
+                                <a class="nav-link" asp-controller="Rooms" asp-action="Index">Room</a>
 			                </li>
 			                <li class="nav-item">
-				                <a class="nav-link" href="/pages/ui-features/dropdowns.html">Dropdowns</a>
+				                <a class="nav-link" asp-controller="RoomDetails" asp-action="Index">Room Details</a>
 			                </li>
 			                <li class="nav-item">
-				                <a class="nav-link" href="/pages/ui-features/typography.html">Typography</a>
+				                <a class="nav-link" asp-controller="RoomImages" asp-action="Index">Room Images</a>
 			                </li>
 		                </ul>
 	                </div>
@@ -100,14 +101,14 @@
                     </a>
                 </li>
                 <li class="nav-item">
-	                <a class="nav-link" href="/pages/tables/basic-table.html">
+	                <a class="nav-link" asp-controller="Reservations" asp-action="Index">
 		                <i class="fa-solid fa-magnifying-glass-chart menu-icon"></i>
 		                <span class="menu-title">Reservations</span>
 	                </a>
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="https://www.bootstrapdash.com/demo/breeze-free/documentation/documentation.html">
+                    <a class="nav-link" asp-controller="Testimonies" asp-action="Index">
                         <i class="fa-regular fa-comment-dots  menu-icon"></i>
                         <span class="menu-title">Testimony</span>
                     </a>
@@ -205,6 +206,7 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 	<script src="https://kit.fontawesome.com/4a8137dc1d.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
     @await RenderSectionAsync("Styles", required: false)
 </body>

@@ -1,0 +1,139 @@
+﻿@model IEnumerable<App.Admin.Models.Reservation>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+<div style="margin-left:5%;margin-right:5%">
+	<h1>Reservations requests</h1>
+
+	<table id="reservationTable" class="display" data-ajax="@Url.Action("LoadReservations")">
+		<div>
+			<label for="statusFilter">Status:</label>
+			<select id="statusFilter">
+				<option value="">All</option>
+				<option value="Pending">Pending</option>
+				<option value="Answered">Answered</option>
+			</select>
+		</div>
+		<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.Id)
+			</th>
+			<th>
+				@Html.DisplayName("Room")
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.UserName)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.UserEmail)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.PhoneNumber)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Status)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Date)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.CreatedDate)
+			</th>
+			<th></th>
+		</tr>
+		</thead>
+		<tbody></tbody>
+	</table>
+	<!-- Modal for confirmation -->
+	<div class="modal fade" id="confirmationModal" tabindex="-1" role="dialog" aria-labelledby="confirmationModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="confirmationModalLabel">Confirm Status Change</h5>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					Are you sure you want to change the status to answered?
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+					<button type="button" class="btn btn-primary" id="confirmChangeStatus">Yes, Change Status</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+@section Scripts
+{
+    <script>
+        $(document).ready(function () {
+            var dataTable = $('#reservationTable').DataTable({
+                serverSide: true,
+                processing: true,
+                ajax: {
+                    url: $('#reservationTable').data('ajax'),
+                    type: 'GET'
+                },
+                columns: [
+                    {
+                        data: 'id'
+                    },
+					{
+                        data: 'roomName'
+                    },
+                    { data: 'userName' },
+                    { data: 'userEmail' },
+                    { data: 'phoneNumber' },
+                    {
+                        data: 'status',
+                        render: function (data, type, row) {
+                            if (data === 'Answered') {
+                                return '<button class="btn btn-success" disabled>Answered</button>';
+                            } else {
+                                return '<a href="#" class="btn btn-primary mark-as-answered" data-id="' + row.id + '" data-toggle="modal" data-target="#confirmationModal">Mark as Answered</a>';
+                            }
+                        }
+                    },
+                    { data: 'date' },
+                    { data: 'createdDate' }                    
+                    
+                ],
+                order: [[0, 'asc']], // Default sorting column and direction
+                searchDelay: 500, // Delay for search input
+                language: {
+                    processing: '<div class="loader"></div>', // Custom processing indicator
+                    search: '_INPUT_',
+                    searchPlaceholder: 'Search for...'
+                },
+                initComplete: function () {
+                    // Apply the filter based on the selected status
+                    $('#statusFilter').on('change', function () {
+                        dataTable.column(4).search($(this).val()).draw();
+                    });
+                },
+            });
+			$('#confirmChangeStatus').on('click', function () {
+				var id = $(this).data('id');
+				window.location.href = '@Url.Action("ChangeStatus", "Reservations")' + '?id=' + id;
+			});
+
+			// Attach event handler to dynamically added buttons
+			$('#reservationTable').on('click', '.mark-as-answered', function () {
+				var id = $(this).data('id');
+				$('#confirmChangeStatus').data('id', id); // Store the reservation ID in the modal button
+			});
+
+        });
+    </script>
+
+}
+
+

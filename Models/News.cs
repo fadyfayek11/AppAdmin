@@ -8,6 +8,7 @@ public class News
     public int Id { get; set; }
 
     public string Title { get; set; }
+    public string TitleAr { get; set; }
 
     [Display(Name="Cover Image")]
     public string CoverImagePath { get; set; }

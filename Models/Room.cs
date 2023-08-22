@@ -16,8 +16,8 @@ namespace App.Admin.Models
         public int MaxOccupancy { get; set; }
         public bool IsAvailable { get; set; }
         public bool AllowSmoking { get; set; }
-        public ICollection<RoomDetails> RoomDetails { get; set; }
-        public ICollection<RoomImages> RoomImages { get; set; }
+        public ICollection<RoomDetails>? RoomDetails { get; set; }
+        public ICollection<RoomImages>? RoomImages { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
 
     }
