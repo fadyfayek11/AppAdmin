@@ -11,9 +11,9 @@ namespace App.Admin.Models
 
         public string DetailNameAr { get; set; }
 
-        public string DescriptionEn { get; set; }
+        public string? DescriptionEn { get; set; }
 
-        public string DescriptionAr { get; set; }
+        public string? DescriptionAr { get; set; }
 
         public bool IsIcon { get; set; }
 

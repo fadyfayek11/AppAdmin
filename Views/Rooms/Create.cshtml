@@ -1,79 +1,290 @@
-﻿@model App.Admin.Models.Room
+﻿@model App.Admin.ViewModels.RoomDetailsViewModel
 
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+@section Styles
+    {
+    <style>
+        .image-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
 
-<h4>Room</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="NameAr" class="control-label"></label>
-                <input asp-for="NameAr" class="form-control" />
-                <span asp-validation-for="NameAr" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="NameEn" class="control-label"></label>
-                <input asp-for="NameEn" class="form-control" />
-                <span asp-validation-for="NameEn" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DescriptionEn" class="control-label"></label>
-                <input asp-for="DescriptionEn" class="form-control" />
-                <span asp-validation-for="DescriptionEn" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DescriptionAr" class="control-label"></label>
-                <input asp-for="DescriptionAr" class="form-control" />
-                <span asp-validation-for="DescriptionAr" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Size" class="control-label"></label>
-                <input asp-for="Size" class="form-control" />
-                <span asp-validation-for="Size" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="MaxOccupancy" class="control-label"></label>
-                <input asp-for="MaxOccupancy" class="form-control" />
-                <span asp-validation-for="MaxOccupancy" class="text-danger"></span>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsAvailable" /> @Html.DisplayNameFor(model => model.IsAvailable)
-                </label>
-            </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="AllowSmoking" /> @Html.DisplayNameFor(model => model.AllowSmoking)
-                </label>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedDate" class="control-label"></label>
-                <input asp-for="CreatedDate" class="form-control" />
-                <span asp-validation-for="CreatedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
-    </div>
+        .image-preview-item {
+            position: relative;
+            margin: 5%;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            height: auto;
+        }
+
+    </style>
+
+}
+
+<div class="container mt-5">
+	<div id="loader" class="loader"></div>
+	<h1>Create</h1>
+
+	<h4>Room</h4>
+	<hr/>
+	<div class="row justify-content-center">
+		<div class="col-md-8">
+			<div class="card">
+				<div class="card-header">
+					Add Room
+				</div>
+				<div class="card-body">
+					<ul class="nav nav-pills mb-3" id="stepper" role="tablist">
+						<li class="nav-item" role="presentation">
+							<a class="nav-link active" id="step1-tab" data-toggle="pill" href="#step1" role="tab" aria-controls="step1" aria-selected="true">Step 1: General Info</a>
+						</li>
+						<li class="nav-item" role="presentation">
+							<a class="nav-link" id="step2-tab" data-toggle="pill" href="#step2" role="tab" aria-controls="step2" aria-selected="false">Step 2: Room Details</a>
+						</li>
+						<li class="nav-item" role="presentation">
+							<a class="nav-link" id="step3-tab" data-toggle="pill" href="#step3" role="tab" aria-controls="step3" aria-selected="false">Step 3: Room Images</a>
+						</li>
+					</ul>
+					<form asp-action="Create" enctype="multipart/form-data">
+						<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+						<div class="tab-content" id="stepperContent">
+							<!-- Step 1: General Info -->
+							<div class="tab-pane fade show active" id="step1" role="tabpanel" aria-labelledby="step1-tab">
+								<!-- General info form fields -->
+
+								<div class="form-group">
+									<label asp-for="NameAr" class="control-label"></label>
+									<input asp-for="NameAr" class="form-control"/>
+									<span asp-validation-for="NameAr" class="text-danger"></span>
+								</div>
+								<div class="form-group">
+									<label asp-for="NameEn" class="control-label"></label>
+									<input asp-for="NameEn" class="form-control"/>
+									<span asp-validation-for="NameEn" class="text-danger"></span>
+								</div>
+								<div class="form-group">
+									<label asp-for="DescriptionEn" class="control-label"></label>
+									<textarea asp-for="DescriptionEn" class="form-control"></textarea>
+									<span asp-validation-for="DescriptionEn" class="text-danger"></span>
+								</div>
+								<div class="form-group">
+									<label asp-for="DescriptionAr" class="control-label"></label>
+									<textarea asp-for="DescriptionAr" class="form-control"></textarea>
+									<span asp-validation-for="DescriptionAr" class="text-danger"></span>
+								</div>
+								<div class="form-group">
+									<label asp-for="Price" class="control-label"></label>
+									<input asp-for="Price" class="form-control" type="number"/>
+									<span asp-validation-for="Price" class="text-danger"></span>
+								</div>
+								<div class="form-group">
+									<label asp-for="Size" class="control-label"></label>
+									<input asp-for="Size" class="form-control" type="number"/>
+									<span asp-validation-for="Size" class="text-danger"></span>
+								</div>
+								<div class="form-group">
+									<label asp-for="MaxOccupancy" class="control-label"></label>
+									<input asp-for="MaxOccupancy" class="form-control" type="number"/>
+									<span asp-validation-for="MaxOccupancy" class="text-danger"></span>
+								</div>
+								<div class="form-group form-check">
+									<label class="form-check-label">
+										<input class="form-check-input" asp-for="AllowSmoking"/> @Html.DisplayNameFor(model => model.AllowSmoking)
+									</label>
+								</div>
+								<!-- Next button -->
+								<button type="button" class="btn btn-primary next-step">Next</button>
+							</div>
+							<!-- Step 2: Room Details -->
+							<div class="tab-pane fade" id="step2" role="tabpanel" aria-labelledby="step2-tab">
+								<!-- Room details form fields -->
+								<div id="roomDetailsContainer">
+									<div class="room-detail">
+										<div class="form-group">
+											<label asp-for="RoomDetails[0].RoomDetailNameAr" class="control-label"></label>
+											<input asp-for="RoomDetails[0].RoomDetailNameAr" class="form-control"/>
+											<span asp-validation-for="RoomDetails[0].RoomDetailNameAr" class="text-danger"></span>
+										</div>
+										<div class="form-group">
+											<label asp-for="RoomDetails[0].RoomDetailNameEn" class="control-label"></label>
+											<input asp-for="RoomDetails[0].RoomDetailNameEn" class="form-control"/>
+											<span asp-validation-for="RoomDetails[0].RoomDetailNameEn" class="text-danger"></span>
+										</div>
+										<div class="form-group">
+											<label asp-for="RoomDetails[0].RoomDescriptionAr" class="control-label"></label>
+											<input asp-for="RoomDetails[0].RoomDescriptionAr" class="form-control"/>
+											<span asp-validation-for="RoomDetails[0].RoomDescriptionAr" class="text-danger"></span>
+										</div>
+										<div class="form-group">
+											<label asp-for="RoomDetails[0].RoomDescriptionEn" class="control-label"></label>
+											<input asp-for="RoomDetails[0].RoomDescriptionEn" class="form-control"/>
+											<span asp-validation-for="RoomDetails[0].RoomDescriptionEn" class="text-danger"></span>
+										</div>
+										<div class="form-group">
+											<label asp-for="RoomDetails[0].RoomIcon" class="control-label" style="display: none;"></label>
+											<input asp-for="RoomDetails[0].RoomIcon" value="" type="file" class="form-control" style="display: none;" accept="image/*"/>
+											<span asp-validation-for="RoomDetails[0].RoomIcon" class="text-danger"></span>
+										</div>
+
+										<div class="form-group form-check">
+											<label class="form-check-label">
+												<input data-index="0" class="form-check-input isIconCheckbox" asp-for="RoomDetails[0].IsIcon"/> @Html.DisplayNameFor(model => model.RoomDetails[0].IsIcon)
+											</label>
+										</div>
+										<div class="form-group">
+											<button type="button" class="remove-detail-btn btn btn-danger">Remove</button>
+										</div>
+									</div>
+								</div>
+
+								<button type="button" class="btn btn-info" id="add-detail-btn">Add Detail</button>
+
+								<!-- Previous button -->
+								<button type="button" class="btn btn-primary prev-step">Previous</button>
+								<!-- Next button -->
+								<button type="button" class="btn btn-primary next-step">Next</button>
+							</div>
+							<!-- Step 3: Room Images -->
+							<div class="tab-pane fade" id="step3" role="tabpanel" aria-labelledby="step3-tab">
+								<!-- Room images upload form -->
+								<div class="form-group">
+									<label asp-for="RoomImages" class="control-label"></label>
+									<input asp-for="RoomImages" type="file" class="form-control" multiple id="roomImagesInput" accept="image/*"/>
+									<span asp-validation-for="RoomImages" class="text-danger"></span>
+								</div>
+								<div class="image-preview-grid" id="imagePreviewGrid"></div>
+								<!-- Previous button -->
+								<button type="button" class="btn btn-primary prev-step">Previous</button>
+								<!-- Finish button -->
+								<button class="btn btn-success">Finish</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div>
+		<a asp-action="Index">Back to List</a>
+	</div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+        $(document).ready(function () {
+            var $stepperContent = $('#stepperContent');
+
+            $('.next-step').click(function () {
+                var $activeTab = $stepperContent.find('.tab-pane.active');
+                var $nextTab = $activeTab.next('.tab-pane');
+
+                if ($nextTab.length > 0) {
+                    $activeTab.removeClass('active show');
+                    $nextTab.addClass('active show');
+                    $('#stepper li.nav-item a.nav-link.active').removeClass('active');
+                    $('#stepper li.nav-item a.nav-link[href="#' + $nextTab.attr('id') + '"]').addClass('active');
+                }
+            });
+
+            $('.prev-step').click(function () {
+                var $activeTab = $stepperContent.find('.tab-pane.active');
+                var $prevTab = $activeTab.prev('.tab-pane');
+
+                if ($prevTab.length > 0) {
+                    $activeTab.removeClass('active show');
+                    $prevTab.addClass('active show');
+                    $('#stepper li.nav-item a.nav-link.active').removeClass('active');
+                    $('#stepper li.nav-item a.nav-link[href="#' + $prevTab.attr('id') + '"]').addClass('active');
+                }
+            });
+
+            $("#add-detail-btn").click(function () {
+                var detailIndex = $("#roomDetailsContainer .room-detail").length;
+                var detailHtml = `
+                    <div class="room-detail">
+                        <div class="form-group">
+                            <label for="RoomDetails_${detailIndex}__RoomDetailNameAr" class="control-label">Room Detail Name (Arabic)</label>
+                            <input name="RoomDetails[${detailIndex}].RoomDetailNameAr" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label for="RoomDetails_${detailIndex}__RoomDetailNameEn" class="control-label">Room Detail Name (English)</label>
+                            <input name="RoomDetails[${detailIndex}].RoomDetailNameEn" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label for="RoomDetails_${detailIndex}__RoomDescriptionAr" class="control-label">Room Description (Arabic)</label>
+                            <input name="RoomDetails[${detailIndex}].RoomDescriptionAr" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label for="RoomDetails_${detailIndex}__RoomDescriptionEn" class="control-label">Room Description (English)</label>
+                            <input name="RoomDetails[${detailIndex}].RoomDescriptionEn" class="form-control" />
+                        </div>
+                        <div class="form-group">
+                            <label for="RoomDetails_${detailIndex}__RoomIcon" class="control-label" style="display: none;">Room Icon</label>
+                            <input type="file" name="RoomDetails[${detailIndex}].RoomIcon" class="form-control" style="display: none;"  accept="image/*" />
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-check-label">
+                                <input class="isIconCheckbox" data-index="${detailIndex}" name="RoomDetails[${detailIndex}].IsIcon" type="checkbox" /> Display Icon?
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <button class="remove-detail-btn btn btn-danger">Remove</button>
+                        </div>
+                    </div>`;
+                $("#roomDetailsContainer").append(detailHtml);
+            });
+
+            $("#roomDetailsContainer").on("click", ".remove-detail-btn", function () {
+                $(this).closest(".room-detail").remove();
+            });
+
+            $("#roomDetailsContainer").on("change", ".isIconCheckbox", function () {
+                var isChecked = $(this).prop("checked");
+                var index = $(this).data("index");
+                var row = $(this).closest(".room-detail");
+                var iconInput = row.find("input[name='RoomDetails[" + index + "].RoomIcon']");
+                var descriptionLabels = row.find("label[for='RoomDetails_" + index + "__RoomDescriptionAr'], label[for='RoomDetails_" + index + "__RoomDescriptionEn']");
+                var descriptionInputs = row.find("input[name^='RoomDetails[" + index + "].RoomDescription']");
+
+                iconInput.toggle(isChecked);
+                descriptionLabels.toggle(!isChecked);
+                descriptionInputs.toggle(!isChecked);
+
+                if (!isChecked) {
+                    iconInput.val(null); // Clear the file input value if unchecked
+                }
+            });
+			$('#roomImagesInput').change(function () {
+				var $previewGrid = $('#imagePreviewGrid');
+				$previewGrid.empty(); // Clear previous previews
+
+				var files = Array.from(this.files);
+				files.forEach(function (file) {
+					var reader = new FileReader();
+					reader.onload = function (event) {
+						var img = $('<img>').attr('src', event.target.result);
+						img.addClass('preview-image');
+						$previewGrid.append(img);
+					};
+					reader.readAsDataURL(file);
+				});
+			});
+			$('form').submit(function () {
+				console.log("loader");
+				$('#loader').show();
+			});
+        });		
+    </script>
 }

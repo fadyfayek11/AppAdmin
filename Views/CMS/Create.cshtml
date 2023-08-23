@@ -42,7 +42,7 @@
 				<input asp-for="Key" type="hidden" value="OurTeam" class="form-control" />
 				<div class="form-group">
 					<label asp-for="Images" class="control-label"></label>
-					<input asp-for="Images" type="file" class="form-control" multiple />
+                    <input asp-for="Images" type="file" class="form-control" multiple accept="image/*" />
 					<span asp-validation-for="Images" class="text-danger"></span>
 				</div>
 				<div class="image-preview-grid" id="imagePreviewGrid"></div>
