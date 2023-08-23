@@ -7,8 +7,11 @@ public class News
     [Key]
     public int Id { get; set; }
 
-    public string Title { get; set; }
-    public string TitleAr { get; set; }
+    [Display(Name = "Title (English)")]
+	public string Title { get; set; }
+
+    [Display(Name = "Title (Arabic)")]
+	public string TitleAr { get; set; }
 
     [Display(Name="Cover Image")]
     public string CoverImagePath { get; set; }

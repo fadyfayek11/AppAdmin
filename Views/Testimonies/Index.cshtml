@@ -23,6 +23,9 @@
 				@Html.DisplayNameFor(model => model.Description)
 			</th>
 			<th>
+				@Html.DisplayNameFor(model => model.DescriptionAr)
+			</th>
+			<th>
 				@Html.DisplayNameFor(model => model.UserName)
 			</th>
 			<th>
@@ -42,7 +45,16 @@
 					@Html.DisplayFor(modelItem => item.Title)
 				</td>
 				<td>
-					@Html.DisplayFor(modelItem => item.Description)
+					@{
+						string truncatedContent = item.Description.Length > 50 ? item.Description.Substring(0, 50) + "..." : item.Description;
+					}
+					@truncatedContent
+				</td>
+				<td>
+					@{
+						string truncatedContentAr = item.DescriptionAr.Length > 50 ? item.Description.Substring(0, 50) + "..." : item.DescriptionAr;
+					}
+					@truncatedContentAr
 				</td>
 				<td>
 					@Html.DisplayFor(modelItem => item.UserName)

@@ -206,22 +206,7 @@ namespace App.Admin.Controllers
             return View(room);
         }
 
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Rooms == null)
-            {
-                return NotFound();
-            }
-
-            var room = await _context.Rooms
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (room == null)
-            {
-                return NotFound();
-            }
-
-            return View(room);
-        }
+        
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
@@ -229,7 +214,7 @@ namespace App.Admin.Controllers
         {
             if (_context.Rooms == null)
             {
-                return Problem("Entity set 'IdentityContext.Rooms'  is null.");
+	            return Json(new { success = false });
             }
             var room = await _context.Rooms.FindAsync(id);
             if (room != null)
@@ -238,8 +223,8 @@ namespace App.Admin.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+            return Json(new { success = true });
+		}
 
         private bool RoomExists(int id)
         {

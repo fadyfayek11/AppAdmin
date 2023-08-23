@@ -6,7 +6,9 @@ namespace App.Admin.Models
     {
         [Key]
         public int Id { get; set; }
-        public string Path { get; set; }
+
+        [Display(Name = "Image")]
+		public string Path { get; set; }
         public int RoomId { get; set; }
 
         // Navigation property

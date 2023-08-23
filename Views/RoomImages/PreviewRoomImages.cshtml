@@ -1,0 +1,80 @@
+﻿@model IEnumerable<App.Admin.Models.RoomImages>
+
+@{
+    ViewData["Title"] = "RoomImages";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+
+@section Styles {
+    <style>
+        .image-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .image-item {
+            width: calc(25% - 20px); /* 4 images in a row with a little gap */
+            margin: 10px;
+            text-align: center;
+        }
+
+            .image-item img {
+                max-width: 100%;
+                height: auto;
+            }
+    </style>
+}
+<div style="margin-left:5%;margin-right:5%">
+    <h1>Room Images</h1>
+
+	<h4>Preview</h4>
+	<hr />
+	<p>
+        <a asp-action="Create" asp-route-roomId="@Model.ElementAt(0).RoomId">Add Room Images</a>
+	</p>
+	<div class="image-grid">
+		@foreach (var image in Model)
+		{
+			<div class="image-item">
+				<img src="@Url.Content("~/" + image.Path)" alt="Image" />
+				<button class="btn btn-danger delete-image-btn" data-image-id="@image.Id">Delete</button>
+			</div>
+		}
+	</div>
+	<div>
+		<a asp-action="Index">Back to List</a>
+	</div>
+</div>
+
+
+@section Scripts {
+	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+	<script>
+        $(document).ready(function () {
+            $(".delete-image-btn").on("click", function () {
+                var imageId = $(this).data("image-id");
+                var imageContainer = $(this).closest(".image-item");
+
+                if (confirm("Are you sure you want to delete this image?")) {
+                    $.ajax({
+                        url: "/roomImages/Delete/" + imageId,
+                        type: "POST",
+                        success: function (result) {
+                            // Remove the image container from the DOM
+                            if (result.success) {
+                                imageContainer.remove();
+                                //location.reload();
+                            } else {
+                                alert("Sorry try again later");
+                            }
+                        },
+                        error: function () {
+                            alert("An error occurred while deleting the image.");
+                        }
+                    });
+                }
+            });
+        });
+	</script>
+}

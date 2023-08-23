@@ -1,43 +1,95 @@
-﻿@model App.Admin.Models.RoomImages
+﻿@model App.Admin.ViewModels.ImagesModel
 
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+@section Styles
+    {
+    <style>
+        .image-preview-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
 
-<h4>RoomImages</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Path" class="control-label"></label>
-                <input asp-for="Path" class="form-control" />
-                <span asp-validation-for="Path" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="RoomId" class="control-label"></label>
-                <select asp-for="RoomId" class ="form-control" asp-items="ViewBag.RoomId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="CreatedDate" class="control-label"></label>
-                <input asp-for="CreatedDate" class="form-control" />
-                <span asp-validation-for="CreatedDate" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+        .image-preview-item {
+            position: relative;
+            margin: 5%;
+        }
+
+        .preview-image {
+            max-width: 100%;
+            height: auto;
+        }
+
+    </style>
+
+}
+
+
+<div style="margin-left:5%;margin-right:5%">
+    <h1>Adding Room Images</h1>
+
+    <h4>Room Images</h4>
+	<hr />
+	@{
+		int roomId = (int)ViewData["RoomId"];
+	}
+    <div class="row">
+        <div class="col-md-4">
+            <form id="imageForm" asp-action="Create" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <input asp-for="Id" type="hidden" value="@roomId" class="form-control" />
+                <div class="form-group">
+                    <label asp-for="Images" class="control-label"></label>
+                    <input asp-for="Images" type="file" class="form-control" multiple accept="image/*" />
+                    <span asp-validation-for="Images" class="text-danger"></span>
+                </div>
+                <div class="image-preview-grid" id="imagePreviewGrid"></div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
     </div>
+
+    <div>
+        <a asp-action="Index">Back to List</a>
+    </div>
+
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const imagePreviewGrid = document.getElementById("imagePreviewGrid");
+            const fileInput = document.querySelector("input[type='file']");
+            const submitButton = document.getElementById("submitButton");
+
+            fileInput.addEventListener("change", function () {
+                imagePreviewGrid.innerHTML = ""; // Clear previous previews
+                const files = Array.from(fileInput.files);
+                files.forEach(file => {
+                    const previewItem = document.createElement("div");
+                    previewItem.className = "image-preview-item";
+
+                    const image = document.createElement("img");
+                    image.src = URL.createObjectURL(file);
+                    image.className = "preview-image";
+                    previewItem.appendChild(image);
+
+                    imagePreviewGrid.appendChild(previewItem);
+                });
+            });
+
+        });
+
+    </script>
 }

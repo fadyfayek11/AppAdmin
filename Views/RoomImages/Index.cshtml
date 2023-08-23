@@ -1,48 +1,48 @@
-﻿@model IEnumerable<App.Admin.Models.RoomImages>
+﻿@model IEnumerable<App.Admin.ViewModels.RoomImageViewModel>
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
+<div style="margin-left:5%;margin-right:5%">
+	<h1>Rooms</h1>
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Path)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Room)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedDate)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Path)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Room.Id)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedDate)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+	<table class="table">
+		<thead>
+		<tr>
+			<th>
+				@Html.DisplayNameFor(model => model.RoomId)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.RoomName)
+			</th>
+			<th>
+				@Html.DisplayNameFor(model => model.Price)
+			</th>
+			<th></th>
+		</tr>
+		</thead>
+		<tbody>
+		@foreach (var item in Model) {
+			<tr>
+				<td>
+					<a href="/room/details/@item.RoomId">
+						@item.RoomId
+					</a>
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.RoomName)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.Price)
+				</td>
+				<td>
+					<a class="btn btn-info" asp-action="PreviewRoomImages" asp-route-id="@item.RoomId">Preview</a>
+				</td>
+			</tr>
+		}
+		</tbody>
+	</table>
+</div>
+

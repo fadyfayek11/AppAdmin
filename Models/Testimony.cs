@@ -6,10 +6,14 @@ public class Testimony
 {
     [Key]
     public int Id { get; set; }
-    public string Title { get; set; }
-    public string TitleAr { get; set; }
-    public string Description { get; set; }
-    public string DescriptionAr { get; set; }
+    [Display(Name = "Description (English)")]
+	public string Title { get; set; }
+    [Display(Name = "Title (Arabic)")]
+	public string TitleAr { get; set; }
+    [Display(Name = "Description (English)")]
+	public string Description { get; set; }
+    [Display(Name = "Description (Arabic)")]
+	public string DescriptionAr { get; set; }
     [Display(Name = "User Name")]
     public string UserName { get; set; }
     [Display(Name = "User Job")]

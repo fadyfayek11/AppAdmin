@@ -16,13 +16,11 @@ namespace App.Admin.Controllers
             _context = context;
         }
 
-        // GET: Reservations
         public async Task<IActionResult> Index()
         {
             return View();
         }
 
-        // GET: Reservations/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null || _context.Reservations == null)
@@ -46,9 +44,7 @@ namespace App.Admin.Controllers
             return View();
         }
 
-        // POST: Reservations/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Id,UserName,UserEmail,PhoneNumber,Status,Date,CreatedDate")] Reservation reservation)
@@ -62,76 +58,8 @@ namespace App.Admin.Controllers
             return View(reservation);
         }
 
-        // GET: Reservations/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.Reservations == null)
-            {
-                return NotFound();
-            }
-
-            var reservation = await _context.Reservations.FindAsync(id);
-            if (reservation == null)
-            {
-                return NotFound();
-            }
-            return View(reservation);
-        }
-
-        // POST: Reservations/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,UserName,UserEmail,PhoneNumber,Status,Date,CreatedDate")] Reservation reservation)
-        {
-            if (id != reservation.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(reservation);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!ReservationExists(reservation.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(reservation);
-        }
-
-        // GET: Reservations/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.Reservations == null)
-            {
-                return NotFound();
-            }
-
-            var reservation = await _context.Reservations
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (reservation == null)
-            {
-                return NotFound();
-            }
-
-            return View(reservation);
-        }
-
-        // POST: Reservations/Delete/5
+      
+      
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
@@ -189,6 +117,7 @@ namespace App.Admin.Controllers
                         ? query.OrderBy(r => r.Id)
                         : query.OrderByDescending(r => r.Id);
                     break;
+
                 case "roomName":
                     query = sortDirection == "asc"
                         ? query.OrderBy(r => r.Room.NameEn)
@@ -200,10 +129,23 @@ namespace App.Admin.Controllers
                         ? query.OrderBy(r => r.UserName)
                         : query.OrderByDescending(r => r.UserName);
                     break;
+
                 case "userEmail":
                     query = sortDirection == "asc"
                         ? query.OrderBy(r => r.UserEmail)
                         : query.OrderByDescending(r => r.UserEmail);
+                    break; 
+
+                case "withBreakFast":
+                    query = sortDirection == "asc"
+                        ? query.OrderBy(r => r.WithBreakFast)
+                        : query.OrderByDescending(r => r.WithBreakFast);
+                    break;
+                
+                case "status":
+                    query = sortDirection == "asc"
+                        ? query.OrderBy(r => r.Status)
+                        : query.OrderByDescending(r => r.Status);
                     break; 
                 
                 case "phoneNumber":
@@ -217,6 +159,7 @@ namespace App.Admin.Controllers
                         ? query.OrderBy(r => r.Date)
                         : query.OrderByDescending(r => r.Date);
                     break;
+
                 case "createdDate":
                     query = sortDirection == "asc"
                         ? query.OrderBy(r => r.CreatedDate)
@@ -232,10 +175,12 @@ namespace App.Admin.Controllers
             var reservations = await query.Skip(start).Take(length).Include(x=>x.Room).Select(r=>new ReservationModel
             {
                 Id = r.Id,
+                RoomId = r.Room.Id,
                 RoomName = r.Room.NameEn,
                 UserName = r.UserName,
                 UserEmail = r.UserEmail,
                 PhoneNumber = r.PhoneNumber,
+                WithBreakFast = r.WithBreakFast,
                 Status = r.Status.ToString(),
                 Date = r.Date.ToString("MM/dd/yyyy hh:mm tt"),
                 CreatedDate = r.CreatedDate.ToString("MM/dd/yyyy hh:mm tt")

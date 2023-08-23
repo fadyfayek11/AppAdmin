@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using App.Admin.Models;
+using App.Admin.ViewModels;
 using MarminaAttendance.Identity;
 
 namespace App.Admin.Controllers
@@ -13,142 +9,89 @@ namespace App.Admin.Controllers
     public class RoomImagesController : Controller
     {
         private readonly IdentityContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public RoomImagesController(IdentityContext context)
+
+        public RoomImagesController(IdentityContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
-        // GET: RoomImages
         public async Task<IActionResult> Index()
         {
-            var identityContext = _context.RoomImages.Include(r => r.Room);
-            return View(await identityContext.ToListAsync());
-        }
-
-        // GET: RoomImages/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null || _context.RoomImages == null)
+            var rooms = await _context.RoomImages.Include(r => r.Room)
+                .GroupBy(x=>x.RoomId)
+                .Select(r=>new RoomImageViewModel
             {
-                return NotFound();
+	            RoomId = r.Key,
+	            RoomName = r.First().Room.NameAr,
+	            Price = r.First().Room.Price,
+            }).ToListAsync();
+
+            return View(rooms);
+        }
+        public async Task<IActionResult> PreviewRoomImages(int id)
+        {
+	        var rooms = await _context.RoomImages.Where(r => r.RoomId == id).ToListAsync();
+
+            return View(rooms);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Create([FromForm] ImagesModel images)
+        {
+            if (ModelState.IsValid)
+            {
+                var newImages = new List<RoomImages>();
+
+                foreach (var image in images.Images)
+                {
+                    string imageName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
+                    string imagePath = Path.Combine("uploads", "OurTeam", imageName);
+                    string filePath = Path.Combine(_webHostEnvironment.WebRootPath, imagePath);
+
+                    string directoryPath = Path.GetDirectoryName(filePath);
+                    if (!Directory.Exists(directoryPath))
+                    {
+                        Directory.CreateDirectory(directoryPath);
+                    }
+
+                    using (var stream = new FileStream(filePath, FileMode.Create))
+                    {
+                        await image.CopyToAsync(stream);
+                    }
+
+                    newImages.Add(new RoomImages()
+                    {
+                        RoomId = (int)images.Id,
+                        Path = imagePath
+                    });
+                }
+
+
+                _context.RoomImages.AddRange(newImages);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction(nameof(Index));
             }
 
-            var roomImages = await _context.RoomImages
-                .Include(r => r.Room)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (roomImages == null)
-            {
-                return NotFound();
-            }
-
-            return View(roomImages);
+            return View(images);
         }
 
-        // GET: RoomImages/Create
-        public IActionResult Create()
+        public IActionResult Create(int roomId)
         {
-            ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Id");
+            ViewData["RoomId"] = roomId;
             return View();
         }
 
-        // POST: RoomImages/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Path,RoomId,CreatedDate")] RoomImages roomImages)
-        {
-            if (ModelState.IsValid)
-            {
-                _context.Add(roomImages);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Id", roomImages.RoomId);
-            return View(roomImages);
-        }
 
-        // GET: RoomImages/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null || _context.RoomImages == null)
-            {
-                return NotFound();
-            }
-
-            var roomImages = await _context.RoomImages.FindAsync(id);
-            if (roomImages == null)
-            {
-                return NotFound();
-            }
-            ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Id", roomImages.RoomId);
-            return View(roomImages);
-        }
-
-        // POST: RoomImages/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Path,RoomId,CreatedDate")] RoomImages roomImages)
-        {
-            if (id != roomImages.Id)
-            {
-                return NotFound();
-            }
-
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(roomImages);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!RoomImagesExists(roomImages.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Id", roomImages.RoomId);
-            return View(roomImages);
-        }
-
-        // GET: RoomImages/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.RoomImages == null)
-            {
-                return NotFound();
-            }
-
-            var roomImages = await _context.RoomImages
-                .Include(r => r.Room)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (roomImages == null)
-            {
-                return NotFound();
-            }
-
-            return View(roomImages);
-        }
-
-        // POST: RoomImages/Delete/5
         [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.RoomImages == null)
             {
-                return Problem("Entity set 'IdentityContext.RoomImages'  is null.");
+                return Json(new { success = false });
             }
             var roomImages = await _context.RoomImages.FindAsync(id);
             if (roomImages != null)
@@ -157,7 +100,7 @@ namespace App.Admin.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return Json(new { success = true });
         }
 
         private bool RoomImagesExists(int id)

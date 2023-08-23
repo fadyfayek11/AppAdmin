@@ -35,6 +35,9 @@
 				@Html.DisplayNameFor(model => model.PhoneNumber)
 			</th>
 			<th>
+				@Html.DisplayNameFor(model => model.WithBreakFast)
+			</th>
+			<th>
 				@Html.DisplayNameFor(model => model.Status)
 			</th>
 			<th>
@@ -87,11 +90,16 @@
                         data: 'id'
                     },
 					{
-                        data: 'roomName'
+                        
+						data: 'roomName',
+						render: function (data, type, row) {
+							return '<a href="/room/details/' + row.roomId + '">' + data + '</a>';
+						}
                     },
                     { data: 'userName' },
                     { data: 'userEmail' },
                     { data: 'phoneNumber' },
+					{ data: 'withBreakFast' },
                     {
                         data: 'status',
                         render: function (data, type, row) {
