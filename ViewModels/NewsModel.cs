@@ -6,7 +6,12 @@ namespace App.Admin.ViewModels;
 public class NewsModel
 {
 	public int? Id { get; set; }
-    public string Title { get; set; }
+
+	[Display(Name = "Title (English)")]
+	public string Title { get; set; }
+
+    [Display(Name = "Title (Arabic)")]
+	public string TitleAr { get; set; }
 
     [Display(Name = "Cover Image")]
     public IFormFile? CoverImagePath { get; set; }

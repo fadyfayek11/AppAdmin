@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using App.Admin.Models;
 using App.Admin.ViewModels;
 using MarminaAttendance.Identity;
-using Microsoft.AspNetCore.Hosting;
 
 namespace App.Admin.Controllers
 {
@@ -63,6 +57,7 @@ namespace App.Admin.Controllers
                 var newsEntity = new News
                 {
                     Title = news.Title,
+                    TitleAr = news.TitleAr,
                     CoverImagePath = image,
                     ContentEn = news.ContentEn,
                     ContentAr = news.ContentAr,
@@ -93,6 +88,7 @@ namespace App.Admin.Controllers
             {
 	            Id = news.Id,
 	            Title = news.Title,
+                TitleAr = news.TitleAr,
 	            Path = news.CoverImagePath,
 	            ContentEn = news.ContentEn,
 	            ContentAr = news.ContentAr

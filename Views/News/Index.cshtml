@@ -20,6 +20,9 @@
 				@Html.DisplayNameFor(model => model.Title)
 			</th>
 			<th>
+				@Html.DisplayNameFor(model => model.TitleAr)
+			</th>
+			<th>
 				@Html.DisplayNameFor(model => model.CoverImagePath)
 			</th>
 			<th>
@@ -40,6 +43,9 @@
 			<tr>
 				<td>
 					@Html.DisplayFor(modelItem => item.Title)
+				</td>
+				<td>
+					@Html.DisplayFor(modelItem => item.TitleAr)
 				</td>
 				<td>
 					<img src="@Url.Content("~/" + item.CoverImagePath)" alt="Image" style="border-radius: 50%; overflow: hidden; width: 50px; height: 50px;"/>

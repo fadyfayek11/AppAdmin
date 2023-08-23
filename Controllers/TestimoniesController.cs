@@ -29,7 +29,7 @@ namespace App.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Title,Description,UserName,UserJob,CreatedDate")] Testimony testimony)
+        public async Task<IActionResult> Create(Testimony testimony)
         {
             if (ModelState.IsValid)
             {
@@ -58,7 +58,7 @@ namespace App.Admin.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Title,Description,UserName,UserJob,CreatedDate")] Testimony testimony)
+        public async Task<IActionResult> Edit(int id, Testimony testimony)
         {
             if (id != testimony.Id)
             {
