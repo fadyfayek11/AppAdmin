@@ -101,7 +101,9 @@ namespace App.Admin.Controllers
                 query = query.Where(r =>
                     r.UserName.Contains(searchValue) ||
                     r.UserEmail.Contains(searchValue) ||
-                    r.Status.ToString().Contains(searchValue));
+                    r.PhoneNumber.Contains(searchValue)||
+                    r.Id.ToString().Contains(searchValue));
+
             }
 
             if (!string.IsNullOrEmpty(statusFilter))
