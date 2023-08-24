@@ -27,28 +27,31 @@
 								<div asp-validation-summary="ModelOnly" class="text-danger"></div>
 								<p class="text-white-50 mb-5">Please enter your login and password!</p>
 
-								<div class="form-outline form-white mb-4">
-									<input type="text" asp-for="Input.UserName" placeholder="UserName" class="form-control form-control-lg"/>
-
+								<div class="form-group mb-4">
+									<label for="username" class="text-white">Username</label>
+									<input type="text" asp-for="Input.UserName" id="username" placeholder="Username" class="form-control form-control-lg" />
 									<span asp-validation-for="Input.UserName" class="text-danger"></span>
 								</div>
 
-								<div class="form-outline form-white mb-4">
-									<input type="password" asp-for="Input.Password" placeholder="Password" class="form-control form-control-lg"/>
-
+								<div class="form-group position-relative mb-4">
+									<label for="password" class="text-white">Password</label>
+									<div class="input-group">
+										<input type="password" asp-for="Input.Password" id="password" placeholder="Password" class="form-control form-control-lg" />
+										<div class="input-group-append">
+											<button type="button" class="btn btn-link text-secondary" id="togglePassword">
+												<i class="fa-solid fa-eye"></i>
+											</button>
+										</div>
+									</div>
 									<span asp-validation-for="Input.Password" class="text-danger"></span>
 								</div>
 
-								@* <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="#!">Forgot password?</a></p>
-                                *@
-								<div class="form-outline form-white mb-4">
-
-									<input type="checkbox" asp-for="Input.RememberMe"> Remember me <i class="input-helper"></i>
-
+								<div class="custom-control custom-checkbox mb-4">
+									<input type="checkbox" asp-for="Input.RememberMe" id="rememberMe" class="custom-control-input" />
+									<label class="custom-control-label text-white" for="rememberMe">Remember me</label>
 								</div>
-								<button class="btn btn-outline-light btn-lg px-5" type="submit">Login</button>
-
-
+        
+								<button class="btn btn-info btn-lg px-5" type="submit">Login</button>
 							</div>
 						</form>
 
@@ -60,11 +63,31 @@
 	</div>
 </section>
 <partial name="_ValidationScriptsPartial" />
+
+<script src="/assets/vendors/js/vendor.bundle.base.js"></script>
+<script src="/assets/vendors/select2/select2.min.js"></script>
+<script src="/assets/vendors/typeahead.js/typeahead.bundle.min.js"></script>
+<script src="/assets/js/off-canvas.js"></script>
+<script src="/assets/js/hoverable-collapse.js"></script>
+<script src="/assets/js/misc.js"></script>
+<script src="/assets/js/file-upload.js"></script>
+<script src="/assets/js/typeahead.js"></script>
+<script src="/assets/js/select2.js"></script>
+<script src="https://kit.fontawesome.com/4a8137dc1d.js" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
 <script>
 	$(document).ready(function () {
 		$('form').submit(function () {
 			$('#loader').show();
 		});
-	});	
-</script>
+		document.getElementById("togglePassword").addEventListener("click", function () {
+			const passwordInput = document.getElementById("password");
+			if (passwordInput.type === "password") {
+				passwordInput.type = "text";
+			} else {
+				passwordInput.type = "password";
+			}
+		});
+	});
 
+</script>

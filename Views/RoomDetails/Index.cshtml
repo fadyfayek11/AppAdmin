@@ -1,4 +1,4 @@
-﻿@model IEnumerable<App.Admin.Models.RoomDetails>
+﻿@model IEnumerable<App.Admin.ViewModels.RoomViewModel>
 
 @{
     ViewData["Title"] = "Index";
@@ -6,71 +6,45 @@
 }
 
 <div style="margin-left:5%;margin-right:5%">
-	<h1>Room Details</h1>
-
-	<p>
-		<a asp-action="Create">Add New</a>
-	</p>
+	<h1>Rooms</h1>
+	<h2>Details</h2>
 	<table class="table">
 		<thead>
-		<tr>
-			<th>
-				@Html.DisplayNameFor(model => model.DetailNameEn)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.DetailNameAr)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.DescriptionEn)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.DescriptionAr)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.IsIcon)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.Room)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.CreatedDate)
-			</th>
-			<th></th>
-		</tr>
+			<tr>
+				<th>
+					@Html.DisplayNameFor(model => model.RoomId)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.RoomName)
+				</th>
+				<th>
+					@Html.DisplayNameFor(model => model.Price)
+				</th>
+				<th></th>
+			</tr>
 		</thead>
 		<tbody>
-		@foreach (var item in Model) {
-			<tr>
-				<td>
-					@Html.DisplayFor(modelItem => item.DetailNameEn)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.DetailNameAr)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.DescriptionEn)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.DescriptionAr)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.IsIcon)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.Room.Id)
-				</td>
-				<td>
-					@Html.DisplayFor(modelItem => item.CreatedDate)
-				</td>
-				<td>
-					<a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-					<a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-					<a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-				</td>
-			</tr>
-		}
+			@foreach (var item in Model)
+			{
+				<tr>
+					<td>
+						<a href="/room/details/@item.RoomId">
+							@item.RoomId
+						</a>
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.RoomName)
+					</td>
+					<td>
+						@Html.DisplayFor(modelItem => item.Price)
+					</td>
+					<td>
+						<a class="btn btn-info" asp-action="PreviewRoomDetails" asp-route-id="@item.RoomId">Preview</a>
+					</td>
+				</tr>
+			}
 		</tbody>
 	</table>
-
 </div>
+
 

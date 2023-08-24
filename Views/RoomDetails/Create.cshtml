@@ -1,63 +1,70 @@
-﻿@model App.Admin.Models.RoomDetails
+﻿@model App.Admin.ViewModels.RoomDetailsModel
 
 @{
     ViewData["Title"] = "Create";
     Layout = "~/Pages/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+<div style="margin-left:5%;margin-right:5%">
+	<h1>Create</h1>
 
-<h4>RoomDetails</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-	    <form asp-action="Create">
-		    <div id="loader" class="loader"></div>
-		    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-		    <div class="form-group">
-			    <label asp-for="DetailNameEn" class="control-label"></label>
-			    <input asp-for="DetailNameEn" class="form-control"/>
-			    <span asp-validation-for="DetailNameEn" class="text-danger"></span>
-		    </div>
-		    <div class="form-group">
-			    <label asp-for="DetailNameAr" class="control-label"></label>
-			    <input asp-for="DetailNameAr" class="form-control"/>
-			    <span asp-validation-for="DetailNameAr" class="text-danger"></span>
-		    </div>
-		    <div class="form-group">
-			    <label asp-for="DescriptionEn" class="control-label"></label>
-			    <input asp-for="DescriptionEn" class="form-control"/>
-			    <span asp-validation-for="DescriptionEn" class="text-danger"></span>
-		    </div>
-		    <div class="form-group">
-			    <label asp-for="DescriptionAr" class="control-label"></label>
-			    <input asp-for="DescriptionAr" class="form-control"/>
-			    <span asp-validation-for="DescriptionAr" class="text-danger"></span>
-		    </div>
-		    <div class="form-group form-check">
-			    <label class="form-check-label">
-				    <input class="form-check-input" asp-for="IsIcon"/> @Html.DisplayNameFor(model => model.IsIcon)
-			    </label>
-		    </div>
-		    <div class="form-group">
-			    <label asp-for="RoomId" class="control-label"></label>
-			    <select asp-for="RoomId" class="form-control" asp-items="ViewBag.RoomId"></select>
-		    </div>
-		    <div class="form-group">
-			    <label asp-for="CreatedDate" class="control-label"></label>
-			    <input asp-for="CreatedDate" class="form-control"/>
-			    <span asp-validation-for="CreatedDate" class="text-danger"></span>
-		    </div>
-		    <div class="form-group">
-			    <input type="submit" value="Create" class="btn btn-primary"/>
-		    </div>
-	    </form>
-    </div>
+	<h4>Room Details</h4>
+	<hr />
+	<div class="row">
+		<div class="col-md-4">
+			<form asp-action="Create" enctype="multipart/form-data">
+				<div id="loader" class="loader"></div>
+				<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+				<div class="form-group">
+					<label asp-for="RoomDetailNameEn" class="control-label"></label>
+					<input asp-for="RoomDetailNameEn" class="form-control" />
+					<span asp-validation-for="RoomDetailNameEn" class="text-danger"></span>
+				</div>
+				<div class="form-group">
+					<label asp-for="RoomDetailNameAr" class="control-label"></label>
+					<input asp-for="RoomDetailNameAr" class="form-control" />
+					<span asp-validation-for="RoomDetailNameAr" class="text-danger"></span>
+				</div>
+				<div class="form-group room-description-fields">
+					<label asp-for="RoomDescriptionEn" class="control-label"></label>
+					<input asp-for="RoomDescriptionEn" class="form-control" />
+					<span asp-validation-for="RoomDescriptionEn" class="text-danger"></span>
+				</div>
+				<div class="form-group room-description-fields">
+					<label asp-for="RoomDescriptionAr" class="control-label"></label>
+					<input asp-for="RoomDescriptionAr" class="form-control" />
+					<span asp-validation-for="RoomDescriptionAr" class="text-danger"></span>
+				</div>
+				
+				
+				<div class="form-group room-icon-field" style="display: none;">
+					<label asp-for="RoomIcon" class="control-label"></label>
+					<input asp-for="RoomIcon" class="form-control"/>
+					<span asp-validation-for="RoomIcon" class="text-danger"></span>
+				</div>
+
+				<div class="form-group form-check">
+					<label class="form-check-label">
+						<input id="IsIcon" class="form-check-input" asp-for="IsIcon" /> @Html.DisplayNameFor(model => model.IsIcon)
+					</label>
+				</div>
+
+				<div class="form-group" style="display: none;">
+					<label asp-for="RoomId" class="control-label"></label>
+					<input asp-for="RoomId" class="form-control" value="@ViewBag.RoomId"></input>
+				</div>
+				
+				<div class="form-group">
+					<input type="submit" value="Create" class="btn btn-primary" />
+				</div>
+			</form>
+		</div>
+	</div>
+	<div>
+		<a asp-action="PreviewRoomDetails" asp-route-id="@ViewBag.RoomId">Back to List</a>
+	</div>
 </div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
 
 @section Scripts {
 	@{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
@@ -66,6 +73,25 @@
 			$('form').submit(function () {
 				$('#loader').show();
 			});
+			toggleIconFields($('#IsIcon').is(':checked'));
+
+			// Attach change event to the IsIcon checkbox
+			$('#IsIcon').change(function () {
+				toggleIconFields($(this).is(':checked'));
+			});
+
+			function toggleIconFields(isIconChecked) {
+				var roomIconField = $('.room-icon-field');
+				var descriptionFields = $('.room-description-fields');
+
+				if (isIconChecked) {
+					roomIconField.show();
+					descriptionFields.hide();
+				} else {
+					roomIconField.hide();
+					descriptionFields.show();
+				}
+			}
 		});
 	</script>
 }

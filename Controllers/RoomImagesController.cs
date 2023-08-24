@@ -22,7 +22,7 @@ namespace App.Admin.Controllers
         {
             var rooms = await _context.RoomImages.Include(r => r.Room)
                 .GroupBy(x=>x.RoomId)
-                .Select(r=>new RoomImageViewModel
+                .Select(r=>new RoomViewModel
             {
 	            RoomId = r.Key,
 	            RoomName = r.First().Room.NameAr,
@@ -73,7 +73,7 @@ namespace App.Admin.Controllers
                 _context.RoomImages.AddRange(newImages);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction(nameof(PreviewRoomImages), new{id = images.Id});
             }
 
             return View(images);

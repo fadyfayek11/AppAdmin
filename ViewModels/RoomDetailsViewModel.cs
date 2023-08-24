@@ -37,6 +37,7 @@ public class RoomDetailsViewModel
 
 public class RoomDetailsModel
 {
+	public int? RoomId { get; set; }
 	[Required(ErrorMessage = "Room detail name (English) is required.")]
 	[Display(Name = "Room Detail Name (English)")]
     public string RoomDetailNameEn { get; set; }

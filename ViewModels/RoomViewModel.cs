@@ -2,7 +2,7 @@
 
 namespace App.Admin.ViewModels;
 
-public class RoomImageViewModel
+public class RoomViewModel
 {
 	public int RoomId { get; set; }
 	public string  RoomName{ get; set; }

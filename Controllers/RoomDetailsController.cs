@@ -1,70 +1,106 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MarminaAttendance.Identity;
 using App.Admin.Models;
+using App.Admin.ViewModels;
+using Microsoft.AspNetCore.Hosting;
 
 namespace App.Admin.Controllers
 {
     public class RoomDetailsController : Controller
     {
         private readonly IdentityContext _context;
+        private readonly IWebHostEnvironment _webHostEnvironment;
 
-        public RoomDetailsController(IdentityContext context)
+        public RoomDetailsController(IdentityContext context, IWebHostEnvironment webHostEnvironment)
         {
             _context = context;
+            _webHostEnvironment = webHostEnvironment;
         }
 
-        // GET: RoomDetails
         public async Task<IActionResult> Index()
         {
-            var identityContext = _context.RoomDetails.Include(r => r.Room);
-            return View(await identityContext.ToListAsync());
-        }
+            var rooms = await _context.RoomImages.Include(r => r.Room)
+                .GroupBy(x => x.RoomId)
+                .Select(r => new RoomViewModel
+                {
+                    RoomId = r.Key,
+                    RoomName = r.First().Room.NameAr,
+                    Price = r.First().Room.Price,
+                }).ToListAsync();
 
-        // GET: RoomDetails/Details/5
-        public async Task<IActionResult> Details(int? id)
+            return View(rooms);
+        }
+        public async Task<IActionResult> PreviewRoomDetails(int id)
         {
-            if (id == null || _context.RoomDetails == null)
-            {
-                return NotFound();
-            }
+	        var rooms = await _context.RoomDetails.Where(r => r.RoomId == id).ToListAsync();
 
-            var roomDetails = await _context.RoomDetails
-                .Include(r => r.Room)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (roomDetails == null)
-            {
-                return NotFound();
-            }
-
-            return View(roomDetails);
+	        return View(rooms);
         }
 
-        // GET: RoomDetails/Create
+		
         public IActionResult Create()
         {
-            ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Id");
+            ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Id").Select(x=>x.Value).FirstOrDefault();
             return View();
         }
 
-        // POST: RoomDetails/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,DetailNameEn,DetailNameAr,DescriptionEn,DescriptionAr,IsIcon,RoomId,CreatedDate")] RoomDetails roomDetails)
+        public async Task<IActionResult> Create(RoomDetailsModel roomDetails)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(roomDetails);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
+                 var roomDetailsEntity = new RoomDetails();
+                 if (roomDetails.RoomIcon is not null)
+                 {
+                     string imageName = Guid.NewGuid().ToString() + Path.GetExtension(roomDetails.RoomIcon.FileName);
+                     string imagePath = Path.Combine("uploads", "Room", roomDetails.RoomId?.ToString()??"", imageName);
+                     string filePath = Path.Combine(_webHostEnvironment.WebRootPath, imagePath);
+
+                     string directoryPath = Path.GetDirectoryName(filePath);
+                     if (!Directory.Exists(directoryPath))
+                     {
+                         Directory.CreateDirectory(directoryPath);
+                     }
+
+                     using (var stream = new FileStream(filePath, FileMode.Create))
+                     {
+                         await roomDetails.RoomIcon.CopyToAsync(stream);
+                     }
+
+                     roomDetailsEntity = new RoomDetails
+                     {
+                         DetailNameEn = roomDetails.RoomDetailNameEn,
+                         DetailNameAr = roomDetails.RoomDetailNameAr,
+                         DescriptionEn = imagePath,
+                         DescriptionAr = null,
+                         IsIcon = true,
+                         RoomId = (int)roomDetails.RoomId,
+                         CreatedDate = DateTime.Now
+                     };
+                 }
+                 else
+                 {
+                     roomDetailsEntity = new RoomDetails
+                     {
+                         DetailNameEn = roomDetails.RoomDetailNameEn,
+                         DetailNameAr = roomDetails.RoomDetailNameAr,
+                         DescriptionEn = roomDetails.RoomDescriptionEn ?? "",
+                         DescriptionAr = roomDetails.RoomDescriptionAr ?? "",
+                         IsIcon = false,
+                         RoomId = (int)roomDetails.RoomId,
+                         CreatedDate = DateTime.Now
+                     };
+                 }
+                 _context.RoomDetails.Add(roomDetailsEntity);
+                 await _context.SaveChangesAsync();
+
+				return RedirectToAction(nameof(PreviewRoomDetails), new { id = roomDetails.RoomId });
+			}
+
             ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Id", roomDetails.RoomId);
             return View(roomDetails);
         }
@@ -86,12 +122,10 @@ namespace App.Admin.Controllers
             return View(roomDetails);
         }
 
-        // POST: RoomDetails/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+       
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,DetailNameEn,DetailNameAr,DescriptionEn,DescriptionAr,IsIcon,RoomId,CreatedDate")] RoomDetails roomDetails)
+        public async Task<IActionResult> Edit(int id, RoomDetails roomDetails)
         {
             if (id != roomDetails.Id)
             {
@@ -122,33 +156,15 @@ namespace App.Admin.Controllers
             return View(roomDetails);
         }
 
-        // GET: RoomDetails/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null || _context.RoomDetails == null)
-            {
-                return NotFound();
-            }
+     
 
-            var roomDetails = await _context.RoomDetails
-                .Include(r => r.Room)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (roomDetails == null)
-            {
-                return NotFound();
-            }
-
-            return View(roomDetails);
-        }
-
-        // POST: RoomDetails/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             if (_context.RoomDetails == null)
             {
-                return Problem("Entity set 'IdentityContext.RoomDetails'  is null.");
+                return Json(new { success = true });
             }
             var roomDetails = await _context.RoomDetails.FindAsync(id);
             if (roomDetails != null)
@@ -157,7 +173,7 @@ namespace App.Admin.Controllers
             }
 
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return Json(new { success = true });
         }
 
         private bool RoomDetailsExists(int id)

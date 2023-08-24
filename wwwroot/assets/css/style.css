@@ -14885,9 +14885,10 @@ dl {
 .sidebar {
   min-height: calc(110vh - 70px);
   background: -webkit-gradient(linear, left top, left bottom, from(#e6e5f2), to(#4599cd));
-  background: linear-gradient(to bottom, #e6e5f2, #4599cd);
+  background: linear-gradient(to bottom, #000000, #000000);
   font-family: "Rubik", sans-serif;
   padding: 0;
+  color:white;
   width: 260px;
   z-index: 11;
   transition: width 0.25s ease, background 0.25s ease;
@@ -14949,7 +14950,7 @@ dl {
             font-size: 20px;
             line-height: 1;
             margin-right: 10px;
-            color: #423a8e; }
+            color: #6c9eff; }
             .rtl .sidebar .nav .nav-item .nav-link i.menu-icon {
               margin-left: 10px;
               margin-right: 0; }

@@ -2,9 +2,7 @@
 @using Microsoft.AspNetCore.Identity;
 @inject SignInManager<ApplicationUser> SignInManager
 @inject UserManager<ApplicationUser> UserManager
-@{
-    var user = UserManager.GetUserAsync(User).Result;
-}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -26,10 +24,23 @@
 <body>
     <div class="container-scroller">
         <nav class="sidebar sidebar-offcanvas" id="sidebar">
-            <div class="text-center sidebar-brand-wrapper d-flex align-items-center">
-                <p class="sidebar-brand brand-logo" style="font-weight:bolder">Sanabat DashBoard</p>
-                <a class="sidebar-brand brand-logo-mini pl-4 pt-3" href="/index.html"><img src="/assets/images/logo-mini.svg" alt="logo" /></a>
-            </div>
+	        <div class="text-center sidebar-brand-wrapper d-flex align-items-center">
+		        <p class="sidebar-brand brand-logo" style="font-weight:bolder">Admin Dashboard</p>
+		        <a class="sidebar-brand brand-logo-mini pl-4 pt-3" href="/"><img src="/assets/images/logo-mini.svg" alt="logo" /></a>
+	        </div>
+            @{
+	            bool isAuthenticated = User.Identity?.IsAuthenticated ?? false;
+            }
+            @if (@isAuthenticated is false)
+            {
+	            <script>
+                    window.location.href = '/account/login';
+                </script>
+            }
+	        @{
+
+		        var user = UserManager.GetUserAsync(User).Result;
+	        }
             <ul class="nav">
                 <li class="nav-item nav-profile">
                     <a href="#" class="nav-link">
@@ -46,7 +57,7 @@
 		                    <span class="login-status online"></span>
 		                    <!--change to offline or busy as needed-->
 	                    </div>
-                        <div class="nav-profile-text d-flex flex-column pr-3">
+                        <div class="nav-profile-text d-flex flex-column pr-3 text-white">
                             <span class="font-weight-medium mb-2">@user.UserName</span>
                           
                         </div>
@@ -55,7 +66,7 @@
                 <li class="nav-item">
                     <a class="nav-link" href="/">
                         <i class="mdi mdi-home menu-icon"></i>
-                        <span class="menu-title">Dashboard</span>
+                        <span class="menu-title text-white">Dashboard</span>
                     </a>
                 </li>
 	           
@@ -64,26 +75,26 @@
 	                <li class="nav-item">
 		                <a class="nav-link" asp-controller="Admins" asp-action="Index">
                             <i class="fa-solid fa-user-shield menu-icon"></i>
-			                <span class="menu-title">Admins</span>
+                            <span class="menu-title text-white">Admins</span>
 		                </a>
 	                </li>
                 }
                 <li class="nav-item">
 	                <a class="nav-link" data-toggle="collapse" aria-expanded="false" href="#ui-basic" aria-controls="ui-basic">
                         <i class="fa-solid fa-bed menu-icon"></i>
-		                <span class="menu-title">Rooms</span>
+                        <span class="menu-title text-white">Rooms</span>
 		                <i class="menu-arrow"></i>
 	                </a>
 	                <div class="collapse" id="ui-basic">
 		                <ul class="nav flex-column sub-menu">
 			                <li class="nav-item">
-                                <a class="nav-link" asp-controller="Rooms" asp-action="Index">Room</a>
+                                <a class="nav-link text-white" asp-controller="Rooms" asp-action="Index">Room</a>
 			                </li>
 			                <li class="nav-item">
-				                <a class="nav-link" asp-controller="RoomDetails" asp-action="Index">Room Details</a>
+                                <a class="nav-link text-white" asp-controller="RoomDetails" asp-action="Index">Room Details</a>
 			                </li>
 			                <li class="nav-item">
-				                <a class="nav-link" asp-controller="RoomImages" asp-action="Index">Room Images</a>
+                                <a class="nav-link text-white" asp-controller="RoomImages" asp-action="Index">Room Images</a>
 			                </li>
 		                </ul>
 	                </div>
@@ -91,39 +102,39 @@
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="CMS" asp-action="Index">
                         <i class="fa-solid fa-people-group menu-icon"></i>
-                        <span class="menu-title">Our Team</span>
+                        <span class="menu-title text-white">Our Team</span>
                     </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="News" asp-action="Index">
                         <i class="fa-solid fa-newspaper menu-icon"></i>
-                        <span class="menu-title">News</span>
+                        <span class="menu-title text-white">News</span>
                     </a>
                 </li>
                 <li class="nav-item">
 	                <a class="nav-link" asp-controller="Reservations" asp-action="Index">
 		                <i class="fa-solid fa-magnifying-glass-chart menu-icon"></i>
-		                <span class="menu-title">Reservations</span>
+                        <span class="menu-title text-white">Reservations</span>
 	                </a>
                 </li>
 
                 <li class="nav-item">
                     <a class="nav-link" asp-controller="Testimonies" asp-action="Index">
                         <i class="fa-regular fa-comment-dots  menu-icon"></i>
-                        <span class="menu-title">Testimony</span>
+                        <span class="menu-title text-white">Testimony</span>
                     </a>
                 </li>
                 <li class="nav-item sidebar-actions">
                     <div class="nav-link">
                         <div class="mt-4">
-	                        <div class="border-none">
+	                       @* <div class="border-none">
                                 <i class="fa-solid fa-user-gear  menu-icon"></i>
 		                        <span class="text-black">Setting</span>
-	                        </div>
+	                        </div>*@
                             <ul class="mt-4 pl-0">
 	                            <li>
 		                            <a asp-page="/Account/Logout" asp-route-returnUrl="/Account/Login" style="text-decoration:none">
-                                        <i class="mdi mdi-logout mr-2" style="color:black"></i> <span class="text-black">Sign out</span>
+                                        <i class="mdi mdi-logout mr-2" style="color:white"></i> <span class="text-white">Sign out</span>
                                     </a>
 	                            </li>
                             </ul>
