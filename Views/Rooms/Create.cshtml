@@ -106,51 +106,49 @@
 							<!-- Step 2: Room Details -->
 							<div class="tab-pane fade" id="step2" role="tabpanel" aria-labelledby="step2-tab">
 								<!-- Room details form fields -->
-								<div id="roomDetailsContainer">
-									<div class="room-detail">
-										<div class="form-group">
-											<label asp-for="RoomDetails[0].RoomDetailNameAr" class="control-label"></label>
-											<input asp-for="RoomDetails[0].RoomDetailNameAr" class="form-control"/>
-											<span asp-validation-for="RoomDetails[0].RoomDetailNameAr" class="text-danger"></span>
-										</div>
+								<div id="details-container">
+									<div class="detail">
 										<div class="form-group">
 											<label asp-for="RoomDetails[0].RoomDetailNameEn" class="control-label"></label>
-											<input asp-for="RoomDetails[0].RoomDetailNameEn" class="form-control"/>
+											<input asp-for="RoomDetails[0].RoomDetailNameEn" class="form-control" type="text" />
 											<span asp-validation-for="RoomDetails[0].RoomDetailNameEn" class="text-danger"></span>
 										</div>
 										<div class="form-group">
-											<label asp-for="RoomDetails[0].RoomDescriptionAr" class="control-label"></label>
-											<input asp-for="RoomDetails[0].RoomDescriptionAr" class="form-control"/>
-											<span asp-validation-for="RoomDetails[0].RoomDescriptionAr" class="text-danger"></span>
+											<label asp-for="RoomDetails[0].RoomDetailNameAr" class="control-label"></label>
+											<input asp-for="RoomDetails[0].RoomDetailNameAr" class="form-control" type="text" />
+											<span asp-validation-for="RoomDetails[0].RoomDetailNameAr" class="text-danger"></span>
 										</div>
-										<div class="form-group">
-											<label asp-for="RoomDetails[0].RoomDescriptionEn" class="control-label"></label>
-											<input asp-for="RoomDetails[0].RoomDescriptionEn" class="form-control"/>
-											<span asp-validation-for="RoomDetails[0].RoomDescriptionEn" class="text-danger"></span>
+										
+										<div class="descriptions-container">
+											<div class="description">
+												<div class="form-group">
+													<label asp-for="RoomDetails[0].Descriptions[0].RoomDescriptionEn" class="control-label"></label>
+													<input asp-for="RoomDetails[0].Descriptions[0].RoomDescriptionEn" class="form-control" type="text" />
+												</div>
+												<div class="form-group">
+													<label asp-for="RoomDetails[0].Descriptions[0].RoomDescriptionAr" class="control-label"></label>
+													<input asp-for="RoomDetails[0].Descriptions[0].RoomDescriptionAr" class="form-control" type="text" />
+												</div>
+											</div>
 										</div>
-										<div class="form-group">
-											<label asp-for="RoomDetails[0].RoomIcon" class="control-label" style="display: none;"></label>
-											<input asp-for="RoomDetails[0].RoomIcon" value="" type="file" class="form-control" style="display: none;" accept="image/*"/>
+										<label>
+											<input type="checkbox" asp-for="RoomDetails[0].IsIcon" class="is-icon-checkbox mt-2 mb-2" /> Display Icon?
+										</label>
+										<br/>
+										<button type="button" class="btn btn-success add-description-btn  mt-2 mb-2">Add Description</button>
+										
+										<div class="form-group icon-input-container" style="display: none;">
+											<label asp-for="RoomDetails[0].RoomIcon" class="control-label"></label>
+											<input asp-for="RoomDetails[0].RoomIcon" type="file" class="form-control"  accept="image/*" />
 											<span asp-validation-for="RoomDetails[0].RoomIcon" class="text-danger"></span>
-										</div>
-
-										<div class="form-group form-check">
-											<label class="form-check-label">
-												<input data-index="0" class="form-check-input isIconCheckbox" asp-for="RoomDetails[0].IsIcon"/> @Html.DisplayNameFor(model => model.RoomDetails[0].IsIcon)
-											</label>
-										</div>
-										<div class="form-group">
-											<button type="button" class="remove-detail-btn btn btn-danger">Remove</button>
 										</div>
 									</div>
 								</div>
-
-								<button type="button" class="btn btn-info" id="add-detail-btn">Add Detail</button>
-
+								<button type="button" id="add-detail-btn" class="btn btn-dark">Add Detail</button>
 								<!-- Previous button -->
 								<button type="button" class="btn btn-primary prev-step">Previous</button>
 								<!-- Next button -->
-								<button type="button" class="btn btn-primary next-step">Next</button>
+								<button type="button" class="btn btn-info next-step">Next</button>
 							</div>
 							<!-- Step 3: Room Images -->
 							<div class="tab-pane fade" id="step3" role="tabpanel" aria-labelledby="step3-tab">
@@ -209,77 +207,79 @@
                 }
             });
 
-            $("#add-detail-btn").click(function () {
-                var detailIndex = $("#roomDetailsContainer .room-detail").length;
-                var detailHtml = `
-                    <div class="room-detail">
-                        <div class="form-group">
-                            <label for="RoomDetails_${detailIndex}__RoomDetailNameAr" class="control-label">Room Detail Name (Arabic)</label>
-                            <input name="RoomDetails[${detailIndex}].RoomDetailNameAr" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <label for="RoomDetails_${detailIndex}__RoomDetailNameEn" class="control-label">Room Detail Name (English)</label>
-                            <input name="RoomDetails[${detailIndex}].RoomDetailNameEn" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <label for="RoomDetails_${detailIndex}__RoomDescriptionAr" class="control-label">Room Description (Arabic)</label>
-                            <input name="RoomDetails[${detailIndex}].RoomDescriptionAr" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <label for="RoomDetails_${detailIndex}__RoomDescriptionEn" class="control-label">Room Description (English)</label>
-                            <input name="RoomDetails[${detailIndex}].RoomDescriptionEn" class="form-control" />
-                        </div>
-                        <div class="form-group">
-                            <label for="RoomDetails_${detailIndex}__RoomIcon" class="control-label" style="display: none;">Room Icon</label>
-                            <input type="file" name="RoomDetails[${detailIndex}].RoomIcon" class="form-control" style="display: none;"  accept="image/*" />
-                        </div>
+			var detailCounter = 1;
 
-                        <div class="form-group">
-                            <label class="form-check-label">
-                                <input class="isIconCheckbox" data-index="${detailIndex}" name="RoomDetails[${detailIndex}].IsIcon" type="checkbox" /> Display Icon?
-                            </label>
-                        </div>
-                        <div class="form-group">
-                            <button class="remove-detail-btn btn btn-danger">Remove</button>
-                        </div>
-                    </div>`;
-                $("#roomDetailsContainer").append(detailHtml);
-            });
+			$("#add-detail-btn").click(function () {
+				var detailHtml = `
+							<div class="detail">
+								<div class="form-group">
+									<label for="RoomDetails_${detailCounter}__RoomDetailNameEn" class="control-label">Room Detail Name (English)</label>
+									<input name="RoomDetails[${detailCounter}].RoomDetailNameEn" class="form-control" />
+								</div>
+								<div class="form-group">
+									<label for="RoomDetails_${detailCounter}__RoomDetailNameAr" class="control-label">Room Detail Name (Arabic)</label>
+									<input name="RoomDetails[${detailCounter}].RoomDetailNameAr" class="form-control" />
+								</div>
+								
+								<button type="button" class="btn btn-danger remove-detail-btn mb-3">Remove Detail</button>
+								<div class="descriptions-container">
+								</div>								
+								<div class="form-group icon-input-container" style="display: none;">
+									<label for="RoomDetails[${detailCounter}].RoomIcon" class="control-label"></label>
+									<input name="RoomDetails[${detailCounter}].RoomIcon" type="file" class="form-control"  accept="image/*" />
+								</div>
+								<label>
+									<input type="checkbox" name="RoomDetails[${detailCounter}].IsIcon" class="is-icon-checkbox  mt-2 mb-2" /> Display Icon?
+								</label>
+								<br/>
+								<button type="button" class="btn btn-primary add-description-btn mt-2 mb-2">Add Description</button>
+							</div>
+						`;
+				$("#details-container").append(detailHtml);
+				detailCounter++;
+			});
 
-            $("#roomDetailsContainer").on("click", ".remove-detail-btn", function () {
-                $(this).closest(".room-detail").remove();
-            });
+			$("#details-container").on("click", ".add-description-btn", function () {
+				var descriptionsContainer = $(this).closest(".detail").find(".descriptions-container");
+				var descriptionsCounter = descriptionsContainer.find(".description").length;
+				var descriptionHtml = `
+							<div class="description">
+								<div class="form-group">
+									<label for="RoomDetails[${detailCounter - 1}].Descriptions[${descriptionsCounter}].RoomDescriptionEn" class="control-label">Room Description (English)</label>
+									<input name="RoomDetails[${detailCounter - 1}].Descriptions[${descriptionsCounter}].RoomDescriptionEn" class="form-control" />
+								</div>
+								<div class="form-group">
+									<label for="RoomDetails[${detailCounter - 1}].Descriptions[${descriptionsCounter}].RoomDescriptionAr" class="control-label">Room Description (Arabic)</label>
+									<input name="RoomDetails[${detailCounter - 1}].Descriptions[${descriptionsCounter}].RoomDescriptionAr" class="form-control" />
+								</div>
+								<button type="button" class="btn btn-danger remove-description-btn mb-3 mt-3">Remove description</button>
+							</div>
+						`;
+				descriptionsContainer.append(descriptionHtml);
+			});
 
-            $("#roomDetailsContainer").on("change", ".isIconCheckbox", function () {
-                var isChecked = $(this).prop("checked");
-                var index = $(this).data("index");
-                var row = $(this).closest(".room-detail");
-                var iconInput = row.find("input[name='RoomDetails[" + index + "].RoomIcon']");
-                var descriptionLabels = row.find("label[for='RoomDetails_" + index + "__RoomDescriptionAr'], label[for='RoomDetails_" + index + "__RoomDescriptionEn']");
-                var descriptionInputs = row.find("input[name^='RoomDetails[" + index + "].RoomDescription']");
+			$("#details-container").on("click", ".remove-description-btn", function () {
+				$(this).closest(".description").remove();
+			});
 
-                iconInput.toggle(isChecked);
-                descriptionLabels.toggle(!isChecked);
-                descriptionInputs.toggle(!isChecked);
+			$("#details-container").on("click", ".remove-detail-btn", function () {
+				$(this).closest(".detail").remove();
+			});
+			// Handle isIcon checkbox change
+			$("#details-container").on("change", ".is-icon-checkbox", function () {
+				var detailContainer = $(this).closest(".detail");
+				var descriptionsContainer = detailContainer.find(".descriptions-container");
+				var iconInputContainer = detailContainer.find(".icon-input-container");
+				var addDescriptionBtn = detailContainer.find(".add-description-btn");
 
-                if (!isChecked) {
-                    iconInput.val(null); // Clear the file input value if unchecked
-                }
-            });
-			$('#roomImagesInput').change(function () {
-				var $previewGrid = $('#imagePreviewGrid');
-				$previewGrid.empty(); // Clear previous previews
-
-				var files = Array.from(this.files);
-				files.forEach(function (file) {
-					var reader = new FileReader();
-					reader.onload = function (event) {
-						var img = $('<img>').attr('src', event.target.result);
-						img.addClass('preview-image');
-						$previewGrid.append(img);
-					};
-					reader.readAsDataURL(file);
-				});
+				if ($(this).is(":checked")) {
+					descriptionsContainer.empty();
+					iconInputContainer.show();
+					addDescriptionBtn.hide();
+				} else {
+					iconInputContainer.hide();
+					addDescriptionBtn.show();
+				}
 			});
 			$('form').submit(function () {
 				$('#loader').show();

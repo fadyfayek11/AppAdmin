@@ -10,6 +10,7 @@ using App.Admin.ViewModels;
 using MarminaAttendance.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using DetailsDescription = App.Admin.Models.DetailsDescription;
 
 namespace App.Admin.Controllers
 {
@@ -75,6 +76,7 @@ namespace App.Admin.Controllers
                 await _context.SaveChangesAsync();
 
                 var roomDetailsEntity = new List<RoomDetails>();
+                var detailsEntity = new List<DetailsDescription>();
                 foreach (var roomDetail in room.RoomDetails)
                 {
 	                if (roomDetail.RoomIcon is not null)
@@ -94,27 +96,39 @@ namespace App.Admin.Controllers
 							await roomDetail.RoomIcon.CopyToAsync(stream);
 						}
 
-                        roomDetailsEntity.Add(new RoomDetails
+						
+						roomDetailsEntity.Add(new RoomDetails
                         {
 	                        DetailNameEn = roomDetail.RoomDetailNameEn,
 	                        DetailNameAr = roomDetail.RoomDetailNameAr,
-	                        DescriptionEn = imagePath,
-	                        DescriptionAr = null,
 	                        IsIcon = true,
 	                        RoomId = roomEntity.Id,
+                            DetailsDescription = new List<DetailsDescription>()
+                            {
+                                new DetailsDescription
+                                {
+	                                DescriptionEn = imagePath,
+	                                DescriptionAr = "",
+                                }
+                            },
 	                        CreatedDate = DateTime.Now
                         });
-					}
+                       
+	                }
 	                else
 	                {
+		                var des = roomDetail.Descriptions.Select(x => new DetailsDescription
+		                {
+			                DescriptionEn = x.RoomDescriptionEn,
+			                DescriptionAr = x.RoomDescriptionAr,
+		                });
 						roomDetailsEntity.Add(new RoomDetails
 						{
 							DetailNameEn = roomDetail.RoomDetailNameEn,
 							DetailNameAr = roomDetail.RoomDetailNameAr,
-							DescriptionEn = roomDetail.RoomDescriptionEn ?? "",
-							DescriptionAr = roomDetail.RoomDescriptionAr ?? "",
 							IsIcon = false,
 							RoomId = roomEntity.Id,
+                            DetailsDescription = des.ToList(),
 							CreatedDate = DateTime.Now
 						});
 					}

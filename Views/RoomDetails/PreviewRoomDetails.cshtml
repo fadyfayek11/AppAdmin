@@ -9,7 +9,7 @@
 	<h1>Room Details</h1>
 
 	<p>
-		<a asp-action="Create" class="btn btn-info">Add New</a>
+		<a asp-action="Create" asp-route-roomId="@Model.ElementAt(0).RoomId" class="btn btn-info">Add New</a>
 	</p>
 	<table class="table">
 		<thead>
@@ -22,12 +22,12 @@
 			<th>
 				@Html.DisplayNameFor(model => model.DetailNameAr)
 			</th>
-			<th>
+			@*<th>
 				@Html.DisplayNameFor(model => model.DescriptionEn)
 			</th>
 			<th>
 				@Html.DisplayNameFor(model => model.DescriptionAr)
-			</th>
+			</th>*@
 			<th>
 				@Html.DisplayNameFor(model => model.Room)
 			</th>
@@ -46,7 +46,7 @@
 				<td>
 					@Html.DisplayFor(modelItem => item.DetailNameAr)
 				</td>
-				@if (!@item.IsIcon)
+				@*@if (!@item.IsIcon)
 				{
 					<td>
 						@Html.DisplayFor(modelItem => item.DescriptionEn)
@@ -63,7 +63,7 @@
 					<td>
 
 					</td>
-				}
+				}*@
 				<td>
 					<a href="/room/details/@item.RoomId">
 						@item.RoomId

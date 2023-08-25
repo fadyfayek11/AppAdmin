@@ -45,16 +45,22 @@ public class RoomDetailsModel
     [Required(ErrorMessage = "Room detail name (Arabic) is required.")]
 	[Display(Name = "Room Detail Name (Arabic)")]
     public string RoomDetailNameAr { get; set; }
-
-	[Display(Name = "Room Description (English)")]
-	public string? RoomDescriptionEn { get; set; }
-
-    [Display(Name = "Room Description (Arabic)")]
-    public string? RoomDescriptionAr { get; set; }
+    public List<DetailsDescription> Descriptions { get; set; } = new List<DetailsDescription>();
 
     [Display(Name = "Icon")]
     public IFormFile? RoomIcon { get; set; }
 
     [Display(Name = "Display Icon?")]
     public bool IsIcon { get; set; } = false;
+}
+
+public class DetailsDescription
+{
+    public int? RoomDetailsId { get; set; }
+
+    [Display(Name = "Room Description (English)")]
+    public string? RoomDescriptionEn { get; set; }
+
+    [Display(Name = "Room Description (Arabic)")]
+    public string? RoomDescriptionAr { get; set; }
 }

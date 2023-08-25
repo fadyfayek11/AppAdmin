@@ -67,6 +67,30 @@ namespace App.Admin.Migrations
                     b.ToTable("Cmses");
                 });
 
+            modelBuilder.Entity("App.Admin.Models.DetailsDescription", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("DescriptionAr")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("DescriptionEn")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("RoomDetailsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoomDetailsId");
+
+                    b.ToTable("DetailsDescription");
+                });
+
             modelBuilder.Entity("App.Admin.Models.News", b =>
                 {
                     b.Property<int>("Id")
@@ -202,12 +226,6 @@ namespace App.Admin.Migrations
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<string>("DescriptionAr")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("DescriptionEn")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("DetailNameAr")
                         .IsRequired()
@@ -365,29 +383,29 @@ namespace App.Admin.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "199a2a2d-bd6a-437e-984b-12cf84f62f5c",
+                            Id = "344d01e6-ff12-41b8-a28f-72856e0eeebc",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "7dff5aac-5b89-4715-9e27-914a2362bc0f",
+                            ConcurrencyStamp = "093bf302-ce98-417e-a9ee-3b70de975217",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEK9vJkdPWGg+iwV7m7D5JWp7Xbf3nmhM7V5FtM72Mk1y1oGRgCEvOTp7evxtmk7img==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJzF8ehr3eJaBD4lJhdgy1RJ/RCebrfXQUXcBHNWlBAA6cNoLZKbne7OENJqELl0Xw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "5dcfec64-cf3d-40f6-995f-6e3cb1f9ba0c",
+                            SecurityStamp = "061e17df-3b3a-42dd-83b0-8ce577411a5d",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         },
                         new
                         {
-                            Id = "3dee8682-972a-4867-add6-f558b3b96de9",
+                            Id = "3f001d71-955e-42ae-9eb7-ad70f892f064",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "47f95148-d2fc-4b62-a713-0b4670665ed2",
+                            ConcurrencyStamp = "05577179-5006-448f-9761-aa9004fd0f50",
                             EmailConfirmed = false,
                             LockoutEnabled = false,
                             NormalizedUserName = "STAFF",
-                            PasswordHash = "AQAAAAEAACcQAAAAEHy8uqUVSCUXoqlwqZOvygEzKqBvJ76UF93OoyPZ11Yafv9kcTXHlA1HmRo9qyXRAQ==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEA/FXkj/ETMMUsALvFuJfC4/CvtR9TmQFTgIXC3/WEtnl6JVLgOM1UO6sW5c2y8Lpw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "84190077-f348-474f-9c53-262352aa2a80",
+                            SecurityStamp = "3cf03713-bfac-4d84-890f-05cc08abaea1",
                             TwoFactorEnabled = false,
                             UserName = "staff"
                         });
@@ -535,6 +553,17 @@ namespace App.Admin.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("App.Admin.Models.DetailsDescription", b =>
+                {
+                    b.HasOne("App.Admin.Models.RoomDetails", "RoomDetails")
+                        .WithMany("DetailsDescription")
+                        .HasForeignKey("RoomDetailsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("RoomDetails");
+                });
+
             modelBuilder.Entity("App.Admin.Models.Reservation", b =>
                 {
                     b.HasOne("App.Admin.Models.Room", "Room")
@@ -624,6 +653,11 @@ namespace App.Admin.Migrations
                     b.Navigation("RoomDetails");
 
                     b.Navigation("RoomImages");
+                });
+
+            modelBuilder.Entity("App.Admin.Models.RoomDetails", b =>
+                {
+                    b.Navigation("DetailsDescription");
                 });
 #pragma warning restore 612, 618
         }

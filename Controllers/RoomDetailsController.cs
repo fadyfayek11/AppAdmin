@@ -40,9 +40,9 @@ namespace App.Admin.Controllers
         }
 
 		
-        public IActionResult Create()
+        public IActionResult Create(int roomId)
         {
-            ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Id").Select(x=>x.Value).FirstOrDefault();
+            ViewData["RoomId"] = roomId;
             return View();
         }
 
@@ -75,8 +75,8 @@ namespace App.Admin.Controllers
                      {
                          DetailNameEn = roomDetails.RoomDetailNameEn,
                          DetailNameAr = roomDetails.RoomDetailNameAr,
-                         DescriptionEn = imagePath,
-                         DescriptionAr = null,
+                         //DescriptionEn = imagePath,
+                         //DescriptionAr = null,
                          IsIcon = true,
                          RoomId = (int)roomDetails.RoomId,
                          CreatedDate = DateTime.Now
@@ -88,8 +88,8 @@ namespace App.Admin.Controllers
                      {
                          DetailNameEn = roomDetails.RoomDetailNameEn,
                          DetailNameAr = roomDetails.RoomDetailNameAr,
-                         DescriptionEn = roomDetails.RoomDescriptionEn ?? "",
-                         DescriptionAr = roomDetails.RoomDescriptionAr ?? "",
+                         //DescriptionEn = roomDetails.RoomDescriptionEn ?? "",
+                         //DescriptionAr = roomDetails.RoomDescriptionAr ?? "",
                          IsIcon = false,
                          RoomId = (int)roomDetails.RoomId,
                          CreatedDate = DateTime.Now
@@ -101,7 +101,7 @@ namespace App.Admin.Controllers
 				return RedirectToAction(nameof(PreviewRoomDetails), new { id = roomDetails.RoomId });
 			}
 
-            ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Id", roomDetails.RoomId);
+            ViewData["RoomId"] = roomDetails.RoomId;
             return View(roomDetails);
         }
 
@@ -118,7 +118,7 @@ namespace App.Admin.Controllers
             {
                 return NotFound();
             }
-            ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Id", roomDetails.RoomId);
+            ViewData["RoomId"] =  roomDetails.RoomId;
             return View(roomDetails);
         }
 
@@ -152,7 +152,7 @@ namespace App.Admin.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["RoomId"] = new SelectList(_context.Rooms, "Id", "Id", roomDetails.RoomId);
+            ViewData["RoomId"] =  roomDetails.RoomId;
             return View(roomDetails);
         }
 
