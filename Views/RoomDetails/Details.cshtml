@@ -1,0 +1,75 @@
+﻿@model App.Admin.Models.RoomDetails
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+<div style="margin-left:5%;margin-right:5%">
+    <h1>Details</h1>
+
+    <div>
+        <h4>RoomDetails</h4>
+        <hr />
+        <dl class="row">
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.DetailNameEn)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.DetailNameEn)
+            </dd>
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.DetailNameAr)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.DetailNameAr)
+            </dd>
+
+            @if (!Model.IsIcon)
+            {
+                <h6 style="font-weight: bold;color: #000;">
+                    Descriptions
+                </h6>
+                <div class="row col-lg-12 col-sm-12">
+                    <div class="col-lg-6 col-sm-12">
+                        <ul>
+                            @foreach (var des in Model.DetailsDescription.Take(Model.DetailsDescription.Count / 2))
+                            {
+                                <li>@des.DescriptionAr</li>
+                                <li>@des.DescriptionEn</li>
+                            }
+                        </ul>
+                    </div>
+                    <div class="col-lg-6 col-sm-12">
+                        <ul>
+                            @foreach (var des in Model.DetailsDescription.Skip(Model.DetailsDescription.Count / 2))
+                            {
+                                <li>@des.DescriptionAr</li>
+                                <li>@des.DescriptionEn</li>
+                            }
+                        </ul>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <dt class="col-sm-2">
+                    Icon
+                </dt>
+                <dd class="col-sm-10">
+                    <img src="@Url.Content("~/" + @Model.DetailsDescription[0].DescriptionEn)" alt="Image" style="border-radius: 50%; overflow: hidden; width: 50px; height: 50px;" />
+                </dd>
+            }
+            <dt class="col-sm-2">
+                @Html.DisplayNameFor(model => model.CreatedDate)
+            </dt>
+            <dd class="col-sm-10">
+                @Html.DisplayFor(model => model.CreatedDate)
+            </dd>
+        </dl>
+    </div>
+    <div>
+        <a asp-action="Edit" class="btn btn-info" asp-route-id="@Model?.Id">Edit</a> |
+	    <a asp-action="PreviewRoomDetails" asp-route-id="@ViewBag.RoomId">Back to List</a>
+    </div>
+</div>
+

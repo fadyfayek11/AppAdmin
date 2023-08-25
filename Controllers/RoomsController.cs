@@ -76,7 +76,6 @@ namespace App.Admin.Controllers
                 await _context.SaveChangesAsync();
 
                 var roomDetailsEntity = new List<RoomDetails>();
-                var detailsEntity = new List<DetailsDescription>();
                 foreach (var roomDetail in room.RoomDetails)
                 {
 	                if (roomDetail.RoomIcon is not null)
@@ -109,6 +108,7 @@ namespace App.Admin.Controllers
                                 {
 	                                DescriptionEn = imagePath,
 	                                DescriptionAr = "",
+                                    IsIcon = true,
                                 }
                             },
 	                        CreatedDate = DateTime.Now
@@ -121,7 +121,8 @@ namespace App.Admin.Controllers
 		                {
 			                DescriptionEn = x.RoomDescriptionEn,
 			                DescriptionAr = x.RoomDescriptionAr,
-		                });
+                            IsIcon = false,
+                        });
 						roomDetailsEntity.Add(new RoomDetails
 						{
 							DetailNameEn = roomDetail.RoomDetailNameEn,

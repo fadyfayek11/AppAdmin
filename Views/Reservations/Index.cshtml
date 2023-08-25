@@ -41,7 +41,7 @@
 				@Html.DisplayNameFor(model => model.Status)
 			</th>
 			<th>
-				@Html.DisplayNameFor(model => model.Date)
+				@Html.DisplayNameFor(model => model.CheckInDate)
 			</th>
 			<th>
 				@Html.DisplayNameFor(model => model.CreatedDate)
@@ -110,8 +110,8 @@
                             }
                         }
                     },
-                    { data: 'date' },
-                    { data: 'createdDate' }                    
+					{ data: 'checkInDate' },
+                    { data: 'createdCheckInDate' }                    
                     
                 ],
                 order: [[0, 'asc']], // Default sorting column and direction

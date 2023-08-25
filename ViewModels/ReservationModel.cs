@@ -10,6 +10,6 @@ public class ReservationModel
     public string PhoneNumber { get; set; }
     public bool WithBreakFast { get; set; }
     public string Status { get; set; }
-    public string Date { get; set; }
+    public string CheckInDate { get; set; }
     public string CreatedDate { get; set; }
 }

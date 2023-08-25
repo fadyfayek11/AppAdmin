@@ -22,6 +22,6 @@ public class News
     [Display(Name = "Arabic Content")]
 	public string ContentAr { get; set; }
 
-	[Display(Name = "Published Date")]
+	[Display(Name = "Published CheckInDate")]
 	public DateTime DatePublished { get; set; } = DateTime.Now;
 }

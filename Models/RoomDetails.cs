@@ -34,6 +34,7 @@ namespace App.Admin.Models
 
         [Display(Name = "Description (Arabic)")]
         public string? DescriptionAr { get; set; }
+        public bool IsIcon { get; set; }
 
         public int RoomDetailsId { get; set; }
 

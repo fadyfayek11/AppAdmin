@@ -22,12 +22,7 @@
 			<th>
 				@Html.DisplayNameFor(model => model.DetailNameAr)
 			</th>
-			@*<th>
-				@Html.DisplayNameFor(model => model.DescriptionEn)
-			</th>
-			<th>
-				@Html.DisplayNameFor(model => model.DescriptionAr)
-			</th>*@
+			
 			<th>
 				@Html.DisplayNameFor(model => model.Room)
 			</th>
@@ -46,24 +41,6 @@
 				<td>
 					@Html.DisplayFor(modelItem => item.DetailNameAr)
 				</td>
-				@*@if (!@item.IsIcon)
-				{
-					<td>
-						@Html.DisplayFor(modelItem => item.DescriptionEn)
-					</td>
-					<td>
-						@Html.DisplayFor(modelItem => item.DescriptionAr)
-					</td>
-				}
-				else
-				{
-					<td>
-						<img src="@Url.Content("~/" + item.DescriptionEn)" alt="Image" style="border-radius: 50%; overflow: hidden; width: 50px; height: 50px;"/>
-					</td>
-					<td>
-
-					</td>
-				}*@
 				<td>
 					<a href="/room/details/@item.RoomId">
 						@item.RoomId
@@ -74,6 +51,7 @@
 				</td>
 				<td>
 					<a class="btn btn-danger delete-button" data-toggle="modal" data-target="#deleteModal" data-item-id="@item.Id" data-item-name="@item.DetailNameEn">Delete</a>
+					<a class="btn btn-dark" asp-action="Details"  asp-route-id="@item.Id">Details</a>
 				</td>
 			</tr>
 		}

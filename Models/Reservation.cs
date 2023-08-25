@@ -17,10 +17,13 @@ public class Reservation
 
 	[Display(Name = "With BreakFast")]
 	public bool WithBreakFast { get; set; }
+	public ReservationStatus Status { get; set; }
 
-    public ReservationStatus Status { get; set; }
-    public DateTime Date { get; set; }
-    public DateTime CreatedDate { get; set; } = DateTime.Now;
+	[Display(Name = "Check-in Date")]
+	public DateTime CheckInDate { get; set; }
+
+	[Display(Name = "Requested At")]
+	public DateTime CreatedDate { get; set; } = DateTime.Now;
     public int RoomId { get; set; }
 
     // Navigation property

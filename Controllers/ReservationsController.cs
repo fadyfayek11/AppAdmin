@@ -47,7 +47,7 @@ namespace App.Admin.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserName,UserEmail,PhoneNumber,Status,Date,CreatedDate")] Reservation reservation)
+        public async Task<IActionResult> Create([Bind("Id,UserName,UserEmail,PhoneNumber,Status,CheckInDate,CreatedDate")] Reservation reservation)
         {
             if (ModelState.IsValid)
             {
@@ -156,10 +156,10 @@ namespace App.Admin.Controllers
                         : query.OrderByDescending(r => r.PhoneNumber);
                     break; 
                 
-                case "date":
+                case "checkInDate":
                     query = sortDirection == "asc"
-                        ? query.OrderBy(r => r.Date)
-                        : query.OrderByDescending(r => r.Date);
+                        ? query.OrderBy(r => r.CheckInDate)
+                        : query.OrderByDescending(r => r.CheckInDate);
                     break;
 
                 case "createdDate":
@@ -184,7 +184,7 @@ namespace App.Admin.Controllers
                 PhoneNumber = r.PhoneNumber,
                 WithBreakFast = r.WithBreakFast,
                 Status = r.Status.ToString(),
-                Date = r.Date.ToString("MM/dd/yyyy hh:mm tt"),
+                CheckInDate = r.CheckInDate.ToString("MM/dd/yyyy hh:mm tt"),
                 CreatedDate = r.CreatedDate.ToString("MM/dd/yyyy hh:mm tt")
             }).ToListAsync();
 

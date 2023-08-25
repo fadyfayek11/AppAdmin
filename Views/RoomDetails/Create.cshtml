@@ -25,21 +25,24 @@
 					<input asp-for="RoomDetailNameAr" class="form-control" />
 					<span asp-validation-for="RoomDetailNameAr" class="text-danger"></span>
 				</div>
-				@*<div class="form-group room-description-fields">
-					<label asp-for="RoomDescriptionEn" class="control-label"></label>
-					<input asp-for="RoomDescriptionEn" class="form-control" />
-					<span asp-validation-for="RoomDescriptionEn" class="text-danger"></span>
+				<div class="descriptions-container">
+					<div class="description">
+						<div class="form-group">
+							<label asp-for="Descriptions[0].RoomDescriptionEn" class="control-label"></label>
+							<input asp-for="Descriptions[0].RoomDescriptionEn" class="form-control" type="text" />
+						</div>
+						<div class="form-group">
+							<label asp-for="Descriptions[0].RoomDescriptionAr" class="control-label"></label>
+							<input asp-for="Descriptions[0].RoomDescriptionAr" class="form-control" type="text" />
+						</div>
+						<button type="button" class="btn btn-danger remove-description-btn mb-3">Remove Description</button>
+					</div>
 				</div>
-				<div class="form-group room-description-fields">
-					<label asp-for="RoomDescriptionAr" class="control-label"></label>
-					<input asp-for="RoomDescriptionAr" class="form-control" />
-					<span asp-validation-for="RoomDescriptionAr" class="text-danger"></span>
-				</div>*@
 				
-				
+				<button type="button" class="btn btn-success add-description-btn  mt-2 mb-2">Add Description</button>
 				<div class="form-group room-icon-field" style="display: none;">
 					<label asp-for="RoomIcon" class="control-label"></label>
-					<input asp-for="RoomIcon" class="form-control"/>
+					<input asp-for="RoomIcon" class="form-control" type="file" accept="image/*" />
 					<span asp-validation-for="RoomIcon" class="text-danger"></span>
 				</div>
 
@@ -73,11 +76,16 @@
 			$('form').submit(function () {
 				$('#loader').show();
 			});
-			toggleIconFields($('#IsIcon').is(':checked'));
 
-			// Attach change event to the IsIcon checkbox
 			$('#IsIcon').change(function () {
-				toggleIconFields($(this).is(':checked'));
+				var isIconChecked = $(this).is(':checked');
+				toggleIconFields(isIconChecked);
+				if (isIconChecked) {
+					$('.descriptions-container .description').remove(); // Remove all description fields
+					$('.add-description-btn').hide(); // Hide the "Add Description" button
+				} else {
+					$('.add-description-btn').show(); // Show the "Add Description" button
+				}
 			});
 
 			function toggleIconFields(isIconChecked) {
@@ -92,6 +100,35 @@
 					descriptionFields.show();
 				}
 			}
+
+			var descriptionCounter = 0; // Counter to keep track of description fields
+
+			$('.add-description-btn').click(function () {
+				addDescriptionField();
+			});
+
+			$('.descriptions-container').on('click', '.remove-description-btn', function () {
+				$(this).closest('.description').remove();
+			});
+
+			function addDescriptionField() {
+				var descriptionHtml = `
+					<div class="description">
+						<div class="form-group">
+							<label for="Descriptions[${descriptionCounter}].RoomDescriptionEn" class="control-label">Room Description (English)</label>
+							<input name="Descriptions[${descriptionCounter}].RoomDescriptionEn" class="form-control" type="text" />
+						</div>
+						<div class="form-group">
+							<label for="Descriptions[${descriptionCounter}].RoomDescriptionAr" class="control-label">Room Description (Arabic)</label>
+							<input name="Descriptions[${descriptionCounter}].RoomDescriptionAr" class="form-control" type="text" />
+						</div>
+						<button type="button" class="btn btn-danger remove-description-btn mb-3">Remove Description</button>
+					</div>
+				`;
+				$('.descriptions-container').append(descriptionHtml);
+				descriptionCounter++; // Increment the counter for the next description
+			}
 		});
+
 	</script>
 }

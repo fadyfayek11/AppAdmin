@@ -24,6 +24,6 @@ public class Testimony
     [Display(Name = "User Job")]
     public string UserJob { get; set; }
 
-    [Display(Name = "Created Date")]
+    [Display(Name = "Created CheckInDate")]
     public DateTime CreatedDate { get; set; } = DateTime.Now;
 }

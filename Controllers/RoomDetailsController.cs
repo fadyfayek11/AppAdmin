@@ -5,6 +5,7 @@ using MarminaAttendance.Identity;
 using App.Admin.Models;
 using App.Admin.ViewModels;
 using Microsoft.AspNetCore.Hosting;
+using DetailsDescription = App.Admin.Models.DetailsDescription;
 
 namespace App.Admin.Controllers
 {
@@ -75,22 +76,34 @@ namespace App.Admin.Controllers
                      {
                          DetailNameEn = roomDetails.RoomDetailNameEn,
                          DetailNameAr = roomDetails.RoomDetailNameAr,
-                         //DescriptionEn = imagePath,
-                         //DescriptionAr = null,
                          IsIcon = true,
+                         DetailsDescription = new List<DetailsDescription>
+                         {
+	                         new DetailsDescription
+	                         {
+		                         DescriptionEn = imagePath,
+		                         DescriptionAr = "",      
+                                 IsIcon = true
+                             }
+                         },
                          RoomId = (int)roomDetails.RoomId,
                          CreatedDate = DateTime.Now
                      };
                  }
                  else
                  {
-                     roomDetailsEntity = new RoomDetails
+	                 var des = roomDetails.Descriptions.Select(x => new DetailsDescription
+	                 {
+		                 DescriptionEn = x.RoomDescriptionEn,
+		                 DescriptionAr = x.RoomDescriptionAr,
+                         IsIcon = false,
+	                 });
+					roomDetailsEntity = new RoomDetails
                      {
                          DetailNameEn = roomDetails.RoomDetailNameEn,
                          DetailNameAr = roomDetails.RoomDetailNameAr,
-                         //DescriptionEn = roomDetails.RoomDescriptionEn ?? "",
-                         //DescriptionAr = roomDetails.RoomDescriptionAr ?? "",
                          IsIcon = false,
+                         DetailsDescription = des.ToList(),
                          RoomId = (int)roomDetails.RoomId,
                          CreatedDate = DateTime.Now
                      };
@@ -156,9 +169,26 @@ namespace App.Admin.Controllers
             return View(roomDetails);
         }
 
-     
+        public async Task<IActionResult> Details(int? id)
+        {
+	        if (id == null || _context.RoomDetails == null)
+	        {
+		        return NotFound();
+	        }
 
-        [HttpPost, ActionName("Delete")]
+	        var roomDetails = await _context.RoomDetails.Include(x=>x.DetailsDescription)
+		        .FirstOrDefaultAsync(m => m.Id == id);
+	        if (roomDetails == null)
+	        {
+		        return NotFound();
+	        }
+	        ViewData["RoomId"] = roomDetails.RoomId;
+
+			return View(roomDetails);
+        }
+
+
+		[HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
