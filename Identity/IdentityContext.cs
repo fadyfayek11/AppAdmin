@@ -21,27 +21,80 @@ namespace MarminaAttendance.Identity
            .Property(e => e.Photo)
            .IsRequired(false);
 
-           
 
-            var hasher = new PasswordHasher<ApplicationUser>();
-            builder.Entity<ApplicationUser>().HasData(
-                new ApplicationUser
-                {
-                   
-                    UserName = "admin",
-                    NormalizedUserName = "ADMIN",
-                    PasswordHash = hasher.HashPassword(null, "12345678"),
-                },
-                new ApplicationUser
-                {
-                   
-                    UserName = "staff",
-                    NormalizedUserName = "STAFF",
-                    PasswordHash = hasher.HashPassword(null, "12345678"),
-                }
-            );
 
-           
+			// Seed roles
+			builder.Entity<IdentityRole>().HasData(
+				new IdentityRole
+				{
+					Id = "1",
+					Name = "Admin",
+					NormalizedName = "ADMIN"
+				},
+				new IdentityRole
+				{
+					Id = "2",
+					Name = "RootAdmin",
+					NormalizedName = "ROOTADMIN"
+				}
+			);
+
+			// Seed users and assign roles
+			var hasher = new PasswordHasher<ApplicationUser>();
+			builder.Entity<ApplicationUser>().HasData(
+				new ApplicationUser
+				{
+					Id = "1",
+					UserName = "admin",
+					NormalizedUserName = "ADMIN",
+					Email = "admin@sanabat.com",
+					NormalizedEmail = "ADMIN@SANABAT.COM",
+					EmailConfirmed = true,
+					PasswordHash = hasher.HashPassword(null, "P@ssword123")
+				},
+				new ApplicationUser
+				{
+					Id = "2",
+					UserName = "root",
+					NormalizedUserName = "Root",
+					Email = "root@sanabat.com",
+					NormalizedEmail = "ROOT@SANABAT.COM",
+					EmailConfirmed = true,
+					PasswordHash = hasher.HashPassword(null, "P@ssword123")
+				}
+			);
+
+			// Assign roles to users
+			builder.Entity<IdentityUserRole<string>>().HasData(
+				new IdentityUserRole<string>
+				{
+					RoleId = "1", 
+					UserId = "1"  
+				},
+				new IdentityUserRole<string>
+				{
+					RoleId = "2", 
+					UserId = "2"  
+				}
+			);
+
+			builder.Entity<Admin>().HasData(
+				new Admin
+				{
+					Id = 1,
+					IsRoot = false,
+					CreatedDate = default,
+					UserId = "1"
+				},
+				new Admin
+				{
+					Id = 2,
+					IsRoot = true,
+					CreatedDate = default,
+					UserId = "2",
+				}
+			);
+
         }
         public virtual DbSet<Admin> Admins { get; set; }
         public virtual DbSet<Room> Rooms { get; set; }

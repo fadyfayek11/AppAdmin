@@ -4055,12 +4055,13 @@
   .page-item:last-child .page-link {
     border-top-right-radius: 0.25rem;
     border-bottom-right-radius: 0.25rem; }
-  
-  .page-item.active .page-link {
+
+.page-item.active .page-link {
     z-index: 1;
     color: #fff;
-    background-color: #007bff;
-    border-color: #007bff; }
+    background-color: #bf9f5d;
+    border-color: #bf9f5d;
+}
   
   .page-item.disabled .page-link {
     color: #6c757d;
@@ -9846,7 +9847,7 @@
         height: 40px;
         line-height: 40px;
         border-radius: 50%;
-        border: 1px solid #82ebb8; }
+        border: 1px solid #bf984c; }
       .block-27 ul li.active a, .block-27 ul li.active span {
         background: #82ebb8;
         color: #bf984c;

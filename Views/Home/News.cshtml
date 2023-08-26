@@ -1,0 +1,86 @@
+﻿@model App.Admin.ViewModels.NewsViewModel
+
+@{
+	ViewData["Title"] = "News";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<div class="hero-wrap" style="background-image: url('/images/bg_3.jpg');">
+	<div class="overlay"></div>
+	<div class="container">
+		<div class="row no-gutters slider-text d-flex align-itemd-center justify-content-center">
+			<div class="col-md-9 ftco-animate text-center d-flex align-items-end justify-content-center">
+				<div class="text">
+					<p class="breadcrumbs mb-2"><span class="mr-2"><a asp-controller="Home" asp-action="Index" data-i18n="home">Home</a></span> <span data-i18n="News">News</span></p>
+					<h1 class="mb-4 bread" data-i18n="OurNews">Our News</h1>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+@if (Model.NewsArticles.Count != 0)
+{
+	<section class="ftco-section">
+		<div class="container">
+			<div class="row d-flex">
+				@foreach (var article in Model.NewsArticles)
+				{
+					<div class="col-md-4 d-flex ftco-animate">
+						<div class="blog-entry align-self-stretch">
+							<a asp-action="PreviewNews" asp-route-newsId="@article.Id" class="block-20 rounded" style="background-image: url(@Url.Content("/" + article.CoverImagePath.Replace("\\", "/")));">
+							</a>
+							<div class="text mt-3">
+								<div class="meta mb-2">
+									<div><a>@article.DatePublished</a></div>
+									<div><a data-i18n="admin">(By Admin)</a></div>
+								</div>
+								<h3 class="heading"><a>@article.Title</a></h3>
+								@{
+									string truncatedContent = article.Content.Length > 50 ? article.Content.Substring(0, 50) + "..." : article.Content;
+								}
+								<p>@truncatedContent</p>
+								<a asp-action="PreviewNews" asp-route-newsId="@article.Id" class="btn btn-secondary rounded">More info</a>
+							</div>
+						</div>
+					</div>
+				}
+			</div>
+			<div class="row mt-5">
+				<div class="col text-center">
+					<div class="block-27">
+						<ul>
+							@for (int i = 1; i <= Model.PageInfo.TotalItems; i++)
+							{
+								<li class="page-item @(i == Model.PageInfo.CurrentPage ? "active" : "")">
+									<a class="page-link" href="@Url.Action("News", new { page = i })" style="padding-top: 1px;">@i</a>
+								</li>
+							}
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+}
+else
+{
+	<div class="text-center mt-5">
+		<h1 class="display-4" data-i18n="NoData">No News Yet</h1>
+	</div>
+}
+@section Scripts
+	{
+	<script>
+
+		$(document).ready(function () {
+			const navLinks = document.querySelectorAll('.nav-link');
+			navLinks.forEach(link => {
+				link.parentElement.classList.remove('active');
+			});
+			const roomsLink = document.querySelector('a[data-i18n="News"]');
+
+			// Add 'active' class to the "Rooms" navigation item
+			roomsLink.parentElement.classList.add('active');
+		});
+	</script>
+}

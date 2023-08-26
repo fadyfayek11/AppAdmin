@@ -8,7 +8,7 @@ namespace App.Admin.ViewModels
 	public class HomeViewModel
 	{
 		public List<TestimonyHomeViewModel> Testimonies { get; set; }
-		public List<RoomsHomeViewModel> Rooms { get; set; }
+		public List<RoomsHomeViewModel>? Rooms { get; set; }
 		public List<TeamHomeViewModel> Team { get; set; }
 	}
 

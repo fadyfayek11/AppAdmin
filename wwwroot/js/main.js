@@ -126,7 +126,10 @@
 				Close: "Close",
 				Submit: "Submit Reservation",
 				book: "Book it",
-				userEmail: "User Email"
+				userEmail: "User Email",
+				News: "News",
+				NoData: "No data found",
+				OurNews: "Our News",
 
 			}
 		},
@@ -248,7 +251,10 @@
 				Close: "إغلاق",
 				Submit: "إرسال الحجز",
 				book: "احجزها الان",
-				userEmail: "البريد الالكتروني:"
+				userEmail: "البريد الالكتروني:",
+				News: "اخبارنا",
+				NoData: "لا تتوافر لدينا بيانات الان",
+				OurNews: "احدث اخبارنا",
 
 			}
 		}

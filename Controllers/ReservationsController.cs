@@ -160,10 +160,10 @@ namespace App.Admin.Controllers
                         : query.OrderByDescending(r => r.PhoneNumber);
                     break; 
                 
-                case "checkInDate":
+                case "date":
                     query = sortDirection == "asc"
-                        ? query.OrderBy(r => r.CheckInDate)
-                        : query.OrderByDescending(r => r.CheckInDate);
+                        ? query.OrderBy(r => r.Date)
+                        : query.OrderByDescending(r => r.Date);
                     break;
 
                 case "createdDate":
@@ -188,7 +188,7 @@ namespace App.Admin.Controllers
                 PhoneNumber = r.PhoneNumber,
                 WithBreakFast = r.WithBreakFast,
                 Status = r.Status.ToString(),
-                CheckInDate = r.CheckInDate.ToString("MM/dd/yyyy hh:mm tt"),
+                CheckInDate = r.Date.ToString("MM/dd/yyyy hh:mm tt"),
                 CreatedDate = r.CreatedDate.ToString("MM/dd/yyyy hh:mm tt")
             }).ToListAsync();
 

@@ -1,4 +1,5 @@
-﻿using App.Admin.ViewModels;
+﻿using App.Admin.Models;
+using App.Admin.ViewModels;
 using MarminaAttendance.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -116,6 +117,92 @@ namespace App.Admin.Controllers
 				}).ToListAsync();
 			return View(rooms);
 		}
+
+		public async Task<IActionResult> About()
+        {
+            var langCookie = Request.Cookies["language"];
+            var lang = string.IsNullOrEmpty(langCookie) ? "en" : langCookie;
+
+            var team = await _context.Cmses.Where(x => x.Key == "OurTeam").Select(x => new TeamHomeViewModel
+            {
+                Key = x.Key,
+                Value = x.Value,
+            }).ToListAsync();
+            var testimonies = await _context.Testimonies.Select(x => new TestimonyHomeViewModel
+            {
+                Title = lang == "ar" ? x.DescriptionAr : x.Title,
+                Description = lang == "ar" ? x.DescriptionAr : x.Description,
+                UserName = x.UserName,
+                UserJob = x.UserJob
+            }).ToListAsync();
+
+            var home = new HomeViewModel
+            {
+                Testimonies = testimonies,
+                Rooms = null,
+                Team = team
+            };
+            return View(home);
+		}
+
+        public IActionResult Contact()
+        {
+            return View();
+        }
+
+        public async Task<IActionResult> News(int page = 1, int pageSize = 10)
+        {
+            var langCookie = Request.Cookies["language"];
+            var lang = string.IsNullOrEmpty(langCookie) ? "en" : langCookie;
+
+            var totalCountNews = await _context.News.CountAsync();
+            var news = await _context.News
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .OrderByDescending(x=>x.DatePublished)
+                .Select(x=> new NewsVM
+                {
+                    Id = x.Id,
+                    Title = lang == "ar" ? x.TitleAr : x.Title,
+                    CoverImagePath = x.CoverImagePath,
+                    Content = lang == "ar" ? x.ContentAr : x.ContentEn ,
+                    DatePublished = x.DatePublished.ToString("dddd, dd MMMM yyyy"),
+                })
+                .ToListAsync();
+
+            var pageInfo = new PageInfo
+            {
+                CurrentPage = page,
+                ItemsPerPage = pageSize,
+                TotalItems = totalCountNews
+            };
+
+            var viewModel = new NewsViewModel
+            {
+                NewsArticles = news,
+                PageInfo = pageInfo
+            };
+            return View(viewModel);
+        }
+
+        public async Task<IActionResult> PreviewNews(int newsId)
+        {
+	        var langCookie = Request.Cookies["language"];
+	        var lang = string.IsNullOrEmpty(langCookie) ? "en" : langCookie;
+
+			var news = await _context.News
+		        .Where(x=>x.Id == newsId)
+		        .Select(x => new NewsVM
+		        {
+			        Id = x.Id,
+			        Title = lang == "ar" ? x.TitleAr : x.Title,
+			        CoverImagePath = x.CoverImagePath,
+			        Content = lang == "ar" ? x.ContentAr : x.ContentEn,
+			        DatePublished = x.DatePublished.ToString("dddd, dd MMMM yyyy"),
+		        }).FirstOrDefaultAsync();
+		        
+			return View(news);
+        }
 
 	}
 }

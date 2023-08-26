@@ -20,7 +20,7 @@ public class Reservation
 	public ReservationStatus Status { get; set; }
 
 	[Display(Name = "Check-in Date")]
-	public DateTime CheckInDate { get; set; }
+	public DateTime Date { get; set; }
 
 	[Display(Name = "Requested At")]
 	public DateTime CreatedDate { get; set; } = DateTime.Now;

@@ -1,0 +1,39 @@
+﻿@model App.Admin.ViewModels.NewsVM
+
+
+@{
+	ViewData["Title"] = "NewsDetails";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<div class="hero-wrap" style="background-image: url('/images/bg_3.jpg');">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row no-gutters slider-text d-flex align-itemd-center justify-content-center">
+            <div class="col-md-9 ftco-animate text-center d-flex align-items-end justify-content-center">
+                <div class="text">
+                    <p class="breadcrumbs mb-2" data-scrollax="properties: { translateY: '30%', opacity: 1.6 }"><span class="mr-2"><a asp-action="Index" data-i18n="home">Home</a></span> <span class="mr-2"><a asp-action="News" data-i18n="News">News</a></span></p>
+                    <h1 class="mb-4 bread" data-i18n="News">News</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<section class="ftco-section ftco-degree-bg">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 ftco-animate">
+                <h2 class="mb-3">@Model.Title</h2>
+	            <h5>
+                    @Model.Content
+	            </h5>
+	            <p>
+                    <img src="@Url.Content("~/" + @Model.CoverImagePath).Replace("\\","/")" alt="Image" class="img-fluid"/>
+	            </p>
+               
+            </div>
+        </div>
+    </div>
+</section> 

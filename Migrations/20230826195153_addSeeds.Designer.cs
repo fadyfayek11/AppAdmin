@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace App.Admin.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20230826092028_addRoomCoverImage")]
-    partial class addRoomCoverImage
+    [Migration("20230826195153_addSeeds")]
+    partial class addSeeds
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -39,6 +39,7 @@ namespace App.Admin.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("UserId")
+                        .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
@@ -46,6 +47,22 @@ namespace App.Admin.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Admins");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsRoot = false,
+                            UserId = "1"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            IsRoot = true,
+                            UserId = "2"
+                        });
                 });
 
             modelBuilder.Entity("App.Admin.Models.CMS", b =>
@@ -140,10 +157,10 @@ namespace App.Admin.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime>("Date")
+                    b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("CreatedDate")
+                    b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("PhoneNumber")
@@ -392,31 +409,35 @@ namespace App.Admin.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "4d22c0c0-077a-45b5-86a5-89c47d238089",
+                            Id = "1",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "6a383387-2f71-4290-84d1-a9a50babd3e8",
-                            EmailConfirmed = false,
+                            ConcurrencyStamp = "56910753-205f-47ab-a374-f9ddda432e21",
+                            Email = "admin@sanabat.com",
+                            EmailConfirmed = true,
                             LockoutEnabled = false,
+                            NormalizedEmail = "ADMIN@SANABAT.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAEAACcQAAAAEEJCefa2ciGbGKBdGpVyreMyJ11NP9pp6rlRCA+TqYG5FOKkoIhhCq+Ae/CFCw1Kpg==",
+                            PasswordHash = "AQAAAAEAACcQAAAAEJbMEHfwFdGP8BgO8v8FSADNIsOjiXAiOQqax8chaXIAA+CQNc6jNILPhLmD8wN1Ag==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "fe7e7a45-b877-4a3f-a0b1-a8c56339404d",
+                            SecurityStamp = "e4dc0b4a-9337-480b-bbca-aa8ab8f7d214",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         },
                         new
                         {
-                            Id = "6714f825-7ead-43f9-8e1f-8f23b06076f8",
+                            Id = "2",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "abefc731-9ca5-468e-b534-b54d3945fdf1",
-                            EmailConfirmed = false,
+                            ConcurrencyStamp = "f02d1cbc-bb1f-4609-806e-61afc8b93a07",
+                            Email = "root@sanabat.com",
+                            EmailConfirmed = true,
                             LockoutEnabled = false,
-                            NormalizedUserName = "STAFF",
-                            PasswordHash = "AQAAAAEAACcQAAAAEBKsYGJCnx9eiJeKC4svU1Av25QFAZ2hsAIKwU7g99goGhkcHj/L+hugye1bLsUWSw==",
+                            NormalizedEmail = "ROOT@SANABAT.COM",
+                            NormalizedUserName = "Root",
+                            PasswordHash = "AQAAAAEAACcQAAAAEO7SqXdrbRlGBR4MA6TLmaSM483zrhjqMor8HKn6HBdmlWIWcDLZWst6/YXFDBE4nQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "581b6c42-a653-40bc-8fbe-398b1790549c",
+                            SecurityStamp = "808ea46d-c8f9-46de-bb9c-69988257280f",
                             TwoFactorEnabled = false,
-                            UserName = "staff"
+                            UserName = "root"
                         });
                 });
 
@@ -445,6 +466,22 @@ namespace App.Admin.Migrations
                         .HasFilter("[NormalizedName] IS NOT NULL");
 
                     b.ToTable("AspNetRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Id = "1",
+                            ConcurrencyStamp = "70e9ef61-a140-4e0e-90c8-f6dbbb785aca",
+                            Name = "Admin",
+                            NormalizedName = "ADMIN"
+                        },
+                        new
+                        {
+                            Id = "2",
+                            ConcurrencyStamp = "2510027f-fed7-4ee4-a4e3-76c72ae874ee",
+                            Name = "RootAdmin",
+                            NormalizedName = "ROOTADMIN"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -532,6 +569,18 @@ namespace App.Admin.Migrations
                     b.HasIndex("RoleId");
 
                     b.ToTable("AspNetUserRoles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            UserId = "1",
+                            RoleId = "1"
+                        },
+                        new
+                        {
+                            UserId = "2",
+                            RoleId = "2"
+                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<string>", b =>
@@ -557,7 +606,9 @@ namespace App.Admin.Migrations
                 {
                     b.HasOne("MarminaAttendance.Identity.ApplicationUser", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("User");
                 });
