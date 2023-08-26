@@ -1,0 +1,117 @@
+﻿@model App.Admin.ViewModels.RoomHomeViewModel
+
+@{
+    ViewData["Title"] = "RoomDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+<div class="hero-wrap" style="background-image: url('/images/bg_3.jpg');">
+	<div class="overlay"></div>
+	<div class="container">
+		<div class="row no-gutters slider-text d-flex align-itemd-center justify-content-center">
+			<div class="col-md-9 ftco-animate text-center d-flex align-items-end justify-content-center">
+				<div class="text">
+					<p class="breadcrumbs mb-2">
+						<span class="mr-2">
+							<a asp-controller="Home" asp-action="Index" data-i18n="home">Home</a>
+						</span>
+						<span class="mr-2">
+							<a asp-action="Rooms" data-i18n="rooms">Rooms</a>
+						</span> <span data-i18n="roomSingle">Rooms Single</span>
+					</p>
+					<h1 class="mb-4 bread" data-i18n="roomDetails">Rooms Details</h1>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<section class="ftco-section">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="row">
+                    <div class="col-md-12 ftco-animate" style="direction:ltr !important">
+	                    <div class="single-slider owl-carousel">
+                            @foreach (var image in Model.RoomImages!)
+                            {
+	                            <div class="item">
+                                    <div class="room-img" style="background-image:url(@Url.Content("/"+image.Path.Replace("\\","/")));"></div>
+	                            </div>
+                            }
+	                    </div>
+                    </div>
+                    <div class="col-md-12 room-single mt-4 mb-5 ftco-animate">
+						<h2 class="mb-0">@Model.Name <span>(@Model.Price <span data-i18n="roomCost1">SAR</span>)</span></h2>
+	                    <p class="mb-4">
+		                    <span data-i18n="available">Available for</span> @Model.MaxOccupancy <span data-i18n="guests">Guests</span>
+	                    </p>
+	                    <div>
+		                    @foreach (var details in Model.RoomDetails!.Where(x=>!x.IsIcon))
+		                    {
+			                    <h6 style="font-weight: bold;color: #000;">
+				                    @details.DetailName:
+			                    </h6>
+
+                                
+			                    <div class="row col-lg-12 col-sm-12">
+				                    @foreach (var description in details.DetailsDescription.Take(details.DetailsDescription.Count/2))
+				                    {
+					                    <div class="col-lg-6 col-sm-12">					
+						                    <ul>
+							                    <li>@description.Description</li>
+						                    </ul>
+					                    </div>
+				                    }
+                                    @foreach (var description in details.DetailsDescription.Skip(details.DetailsDescription.Count/2))
+                                    {
+                                        <div class="col-lg-6 col-sm-12">
+                                            <ul>
+	                                            <li>@description.Description</li>
+                                            </ul>
+                                        </div>
+                                    }
+			                    </div>
+		                    }
+	                    </div>
+	                    <h5 class="text-dark mt-5">@Model.Description</h5>
+                    </div>
+                </div>
+            </div> <!-- .col-md-8 -->
+            <div class="col-lg-4 sidebar ftco-animate pl-md-5">
+	            <div class="sidebar-box ftco-animate">
+		            <div class="categories">
+						<h3 data-i18n="features">Features</h3>
+						@foreach (var icons in Model.RoomDetails!.Where(x => x.IsIcon))
+						{
+							<li>
+								<a>@icons.DetailName
+									<span>
+										<img src="@Url.Content("/" + @icons.DetailsDescription.Select(x => x.Description).FirstOrDefault()?.Replace("\\","/"))" alt="Image"  style="max-width:25px;max-height:25px"/>
+									</span>
+								</a>
+							</li>
+						}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section> 
+
+@section Scripts
+{
+	<script>
+
+        $(document).ready(function () {
+            const navLinks = document.querySelectorAll('.nav-link');
+            navLinks.forEach(link => {
+                link.parentElement.classList.remove('active');
+            });
+            const roomsLink = document.querySelector('a[data-i18n="Rooms"]');
+
+            // Add 'active' class to the "Rooms" navigation item
+            roomsLink.parentElement.classList.add('active');
+        });       
+	</script>
+}

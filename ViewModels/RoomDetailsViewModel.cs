@@ -17,6 +17,10 @@ public class RoomDetailsViewModel
 
     [Display(Name = "Room Description (Arabic)")]
     public string DescriptionAr { get; set; }
+    
+    [Display(Name = "Cover Image")]
+    public IFormFile CoverImage { get; set; }
+
 	public double Price { get; set; }
 	public double Size { get; set; }
 
@@ -63,4 +67,34 @@ public class DetailsDescription
 
     [Display(Name = "Room Description (Arabic)")]
     public string? RoomDescriptionAr { get; set; }
+}
+
+public class RoomModel
+{
+	public int Id { get; set; }
+	[Display(Name = "Name (Arabic)")]
+	public string NameAr { get; set; }
+
+	[Display(Name = "Name (English)")]
+	public string NameEn { get; set; }
+
+	[Display(Name = "Description (English)")]
+	public string DescriptionEn { get; set; }
+
+	[Display(Name = "Description (Arabic)")]
+	public string DescriptionAr { get; set; }
+
+	[Display(Name = "Cover Image")]
+	public IFormFile? CoverImagePath { get; set; }
+
+	public double Price { get; set; }
+	public double Size { get; set; }
+	[Display(Name = "Max Occupancy")]
+	public int MaxOccupancy { get; set; }
+
+	[Display(Name = "Is Available")]
+	public bool IsAvailable { get; set; }
+
+	[Display(Name = "Allow Smoking")]
+	public bool AllowSmoking { get; set; }
 }

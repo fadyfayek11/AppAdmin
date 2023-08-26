@@ -1,4 +1,4 @@
-﻿@model App.Admin.Models.Room
+﻿@model App.Admin.ViewModels.RoomModel
 
 @{
     ViewData["Title"] = "Edit";
@@ -12,7 +12,7 @@
     <hr />
     <div class="row">
         <div class="col-md-4">
-	        <form asp-action="Edit">
+			<form asp-action="Edit" enctype="multipart/form-data">
 		        <div id="loader" class="loader"></div>
 
 		        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
@@ -36,6 +36,10 @@
 			        <label asp-for="DescriptionAr" class="control-label"></label>
 			        <textarea asp-for="DescriptionAr" class="form-control"></textarea>
 			        <span asp-validation-for="DescriptionAr" class="text-danger"></span>
+		        </div>
+		        <div class="form-group">
+			        <label asp-for="CoverImagePath" class="control-label"></label>
+					<input asp-for="CoverImagePath" class="form-control" type="file" accept="image/*">
 		        </div>
 		        <div class="form-group">
 			        <label asp-for="Price" class="control-label"></label>

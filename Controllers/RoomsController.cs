@@ -59,12 +59,29 @@ namespace App.Admin.Controllers
         {
 	        if (ModelState.Root.Children != null && ModelState.Root.Children.Count(x=>x.ValidationState == ModelValidationState.Valid ) >= 9)
             {
+				string imageName = Guid.NewGuid().ToString() + Path.GetExtension(room.CoverImage.FileName);
+				string imagePath = Path.Combine("uploads", "RoomCovers", Guid.NewGuid().ToString(), imageName);
+				string filePath = Path.Combine(_webHostEnvironment.WebRootPath, imagePath);
+
+				string directoryPath = Path.GetDirectoryName(filePath);
+				if (!Directory.Exists(directoryPath))
+				{
+					Directory.CreateDirectory(directoryPath);
+				}
+
+				using (var stream = new FileStream(filePath, FileMode.Create))
+				{
+					await room.CoverImage.CopyToAsync(stream);
+				}
+	            
+
 	            var roomEntity = new Room
 	            {
 		            NameAr = room.NameAr,
 		            NameEn = room.NameEn,
 		            DescriptionEn = room.DescriptionEn,
 		            DescriptionAr = room.DescriptionAr,
+                    CoverImagePath = imagePath,
 		            Price = room.Price,
 		            Size = room.Size,
 		            MaxOccupancy = room.MaxOccupancy,
@@ -80,11 +97,11 @@ namespace App.Admin.Controllers
                 {
 	                if (roomDetail.RoomIcon is not null)
 	                {
-						string imageName = Guid.NewGuid().ToString() + Path.GetExtension(roomDetail.RoomIcon.FileName);
-						string imagePath = Path.Combine("uploads", "Room", roomEntity.Id.ToString(), imageName);
-						string filePath = Path.Combine(_webHostEnvironment.WebRootPath, imagePath);
+						imageName = Guid.NewGuid().ToString() + Path.GetExtension(roomDetail.RoomIcon.FileName);
+						imagePath = Path.Combine("uploads", "Room", roomEntity.Id.ToString(), imageName);
+						imagePath = Path.Combine(_webHostEnvironment.WebRootPath, imagePath);
 
-						string directoryPath = Path.GetDirectoryName(filePath);
+						filePath = Path.GetDirectoryName(filePath);
 						if (!Directory.Exists(directoryPath))
 						{
 							Directory.CreateDirectory(directoryPath);
@@ -142,11 +159,11 @@ namespace App.Admin.Controllers
                 var roomImages = new List<RoomImages>();
                 foreach (var romImage in room.RoomImages)
                 {
-					string imageName = Guid.NewGuid().ToString() + Path.GetExtension(romImage.FileName);
-					string imagePath = Path.Combine("uploads", "Room", roomEntity.Id.ToString(), imageName);
-					string filePath = Path.Combine(_webHostEnvironment.WebRootPath, imagePath);
-
-					string directoryPath = Path.GetDirectoryName(filePath);
+					imageName = Guid.NewGuid().ToString() + Path.GetExtension(romImage.FileName);
+					imagePath = Path.Combine("uploads", "Room", roomEntity.Id.ToString(), imageName); 
+					filePath = Path.Combine(_webHostEnvironment.WebRootPath, imagePath);
+					 
+	                directoryPath = Path.GetDirectoryName(filePath);
 					if (!Directory.Exists(directoryPath))
 					{
 						Directory.CreateDirectory(directoryPath);
@@ -185,13 +202,27 @@ namespace App.Admin.Controllers
             {
                 return NotFound();
             }
-            return View(room);
+
+            var roomModel = new RoomModel
+            {
+				Id = room.Id,
+				NameAr = room.NameAr,
+				NameEn = room.NameEn,
+				DescriptionEn = room.DescriptionEn,
+				DescriptionAr = room.DescriptionAr,
+				Price = room.Price,
+				Size = room.Size,
+				MaxOccupancy = room.MaxOccupancy,
+				IsAvailable = room.IsAvailable,
+				AllowSmoking = room.AllowSmoking,
+			};
+            return View(roomModel);
         }
 
        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,NameAr,NameEn,DescriptionEn,DescriptionAr,Price,Size,MaxOccupancy,IsAvailable,AllowSmoking,CreatedDate")] Room room)
+        public async Task<IActionResult> Edit(int id,RoomModel room)
         {
             if (id != room.Id)
             {
@@ -202,7 +233,43 @@ namespace App.Admin.Controllers
             {
                 try
                 {
-                    _context.Update(room);
+	                var originalRoomCover = await _context.Rooms.Where(x=>x.Id == room.Id).Select(x=>x.CoverImagePath).FirstOrDefaultAsync();
+	                var roomEntity = new Room
+	                {
+		                Id = room.Id,
+		                NameAr = room.NameAr,
+		                NameEn = room.NameEn,
+		                DescriptionEn = room.DescriptionEn,
+		                DescriptionAr = room.DescriptionAr,
+						CoverImagePath = originalRoomCover ?? "image",
+		                Price = room.Price,
+		                Size = room.Size,
+		                MaxOccupancy = room.MaxOccupancy,
+		                IsAvailable = room.IsAvailable,
+		                AllowSmoking = room.AllowSmoking,
+	                };
+	                if (room.CoverImagePath is not null)
+	                {
+		                string imageName = Guid.NewGuid().ToString() + Path.GetExtension(room.CoverImagePath.FileName);
+		                string imagePath = Path.Combine("uploads", "RoomCovers", Guid.NewGuid().ToString(), imageName);
+		                string filePath = Path.Combine(_webHostEnvironment.WebRootPath, imagePath);
+
+		                string directoryPath = Path.GetDirectoryName(filePath);
+		                if (!Directory.Exists(directoryPath))
+		                {
+			                Directory.CreateDirectory(directoryPath);
+		                }
+
+		                using (var stream = new FileStream(filePath, FileMode.Create))
+		                {
+			                await room.CoverImagePath.CopyToAsync(stream);
+		                }
+
+		                roomEntity.CoverImagePath = imagePath;
+	                }
+	               
+
+					_context.Rooms.Update(roomEntity);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

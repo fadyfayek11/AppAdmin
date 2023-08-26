@@ -1,4 +1,8 @@
 ﻿
+using App.Admin.Models;
+using System.ComponentModel.DataAnnotations;
+using System.Xml.Linq;
+
 namespace App.Admin.ViewModels
 {
 	public class HomeViewModel
@@ -18,15 +22,25 @@ namespace App.Admin.ViewModels
 	}
 	public class RoomsHomeViewModel
 	{
+		public int RoomId { get; set; }
 		public string Name { get; set; }
 		public string Description { get; set; }
+		public string CoverImagePath { get; set; }
 		public double Price { get; set; }
-		public double Size { get; set; }
-		public int MaxOccupancy { get; set; }
-		public bool AllowSmoking { get; set; }
-		public List<RoomDetailsHomeViewModel> RoomDetails { get; set; }
-		public List<RoomImagesHomeViewModel> RoomImages { get; set; }
 	}
+    public class RoomHomeViewModel
+	{
+		public int RoomId { get; set; }
+		public string Name { get; set; }
+		public string Description { get; set; }
+		public string CoverImagePath { get; set; }
+        public double Price { get; set; }
+        public double Size { get; set; }
+        public int MaxOccupancy { get; set; }
+        public bool AllowSmoking { get; set; }
+        public ICollection<RoomDetailsHomeViewModel>? RoomDetails { get; set; }
+        public ICollection<RoomImagesHomeViewModel>? RoomImages { get; set; }
+    }
 	public class RoomDetailsHomeViewModel
 	{
 		public string DetailName { get; set; }

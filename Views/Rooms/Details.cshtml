@@ -67,6 +67,12 @@
                 @Html.DisplayFor(model => model.AllowSmoking)
         </dd>
         <dt class = "col-sm-2">
+                @Html.DisplayNameFor(model => model.CoverImagePath)
+        </dt>
+	    <dd class = "col-sm-10">
+		    <img src="@Url.Content("~/" + @Model.CoverImagePath)" alt="Image" style="max-height:350px;max-width:350px" />
+	    </dd>
+	    <dt class = "col-sm-2">
                 @Html.DisplayNameFor(model => model.CreatedDate)
         </dt>
         <dd class = "col-sm-10">

@@ -41,7 +41,7 @@
 				"position3": "Businessman",
 				"rooms": "Sanbat Platinum Rooms",
 				"master": "Hotel Master's Rooms",
-				"roomCost1": "290-340 SAR",
+				"roomCost1": "SAR",
 				"per": "per night",
 				"roomName1": "Standard Double or Twin Room",
 				"viewDetais": "View Detais",
@@ -108,7 +108,16 @@
 				"Address":"Address",
 				"Phone":"Phone",
 				"Email":"Email",
-				"Website":"Website",
+				"Website": "Website",
+				"Rooms": "Rooms",
+				"News": "News",
+				"available": "Available for",
+				"guests": "Guests",
+				"features": "Features",
+				"roomDetails": "Rooms Details",
+				"rooms": "Rooms",
+				"roomSingle": "Rooms Single",
+
 			}
 		},
 		ar: {
@@ -144,7 +153,7 @@
 				"position3": "رجل أعمال",
 				"rooms": "غرف فندق سانبات بلاتينيوم",
 				"master": "غرف ماستر الفندق",
-				"roomCost1": "290-340 ريال سعودي",
+				"roomCost1": "ريال سعودي",
 				"per": "لليلة",
 				"roomName1": "غرفة مزدوجة أو توأم قياسية",
 				"viewDetais": "عرض التفاصيل",
@@ -211,7 +220,15 @@
 				"Address": "العنوان",
 				"Phone": "الهاتف",
 				"Email": "البريد الإلكتروني",
-				"Website": "الموقع الإلكتروني"
+				"Website": "الموقع الإلكتروني",
+				"Rooms": "الغرف",
+				"News": "الاخبار",
+				"available": "متاحه الي",
+				"guests": "من العملاء",
+				"features": "مميزات",
+				"roomDetails": "تفاصيل الغرف",
+				"rooms": "الغرف",
+				"roomSingle": "غرفه فرديه",
 			}
 		}
 	}
@@ -237,7 +254,7 @@ function setLanguage(lang) {
 	i18next.changeLanguage(lang, function (err, t) {
 	  updateContent();
 	  document.getElementById('selected-language').textContent = lang === 'ar' ? 'العربية' : 'English';
-	  document.getElementById('selected-flag').src = lang === 'ar' ? 'Flag-Saudi-Arabia.png' : 'US_flag_49_stars.svg.png';
+	  document.getElementById('selected-flag').src = lang === 'ar' ? '/Flag-Saudi-Arabia.png' : '/US_flag_49_stars.svg.png';
 	});
 
 	// Store the selected language in a cookie
@@ -246,7 +263,7 @@ function setLanguage(lang) {
 
   function getLanguage() {
 	const cookies = document.cookie.split(';');
-	for (let i = 0; i < cookies.length; i++) {
+	for (let i = 0; i < cookies.length; i++) {	 
 	  const cookie = cookies[i].trim();
 	  if (cookie.startsWith('language=')) {
 		return cookie.substring('language='.length);
@@ -265,7 +282,13 @@ function setLanguage(lang) {
 	item.addEventListener('click', function (event) {
 	  event.preventDefault(); // Prevent default link behavior
 	  const lang = this.getAttribute('data-lang');
-	  setLanguage(lang);
+	  console.log(lang);
+	  console.log(getLanguage());
+		if (getLanguage() !== lang) {
+			setLanguage(lang);
+			window.location.reload();
+		}
+	  
 	});
   });
 

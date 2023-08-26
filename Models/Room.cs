@@ -18,6 +18,9 @@ namespace App.Admin.Models
 
         [Display(Name = "Description (Arabic)")]
         public string DescriptionAr { get; set; }
+        
+        [Display(Name = "Cover Image")]
+        public string CoverImagePath { get; set; }
 
         public double Price { get; set; }
         public double Size { get; set; }

@@ -3491,7 +3491,7 @@
     padding-left: 0;
     margin-bottom: 0;
     list-style: none;
-    margin-right: 50%;
+    margin-right: 40%;
    }
     .navbar-nav .nav-link {
       padding-right: 0;
@@ -10161,4 +10161,7 @@
     100% {
       stroke-dasharray: 89, 200;
       stroke-dashoffset: -136px; } }
-  
+
+.categories{
+    text-align : end !important;
+}
