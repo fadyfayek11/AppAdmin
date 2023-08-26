@@ -160,7 +160,7 @@ namespace App.Admin.Controllers
                         : query.OrderByDescending(r => r.PhoneNumber);
                     break; 
                 
-                case "date":
+                case "checkInDate":
                     query = sortDirection == "asc"
                         ? query.OrderBy(r => r.Date)
                         : query.OrderByDescending(r => r.Date);

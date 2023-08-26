@@ -28,15 +28,6 @@
 		        <p class="sidebar-brand brand-logo" style="font-weight:bolder">Admin Dashboard</p>
 		        <a class="sidebar-brand brand-logo-mini pl-4 pt-3" href="/"><img src="/assets/images/logo-mini.svg" alt="logo" /></a>
 	        </div>
-            @{
-	            bool isAuthenticated = User.Identity?.IsAuthenticated ?? false;
-            }
-            @if (@isAuthenticated is false)
-            {
-	            <script>
-                    window.location.href = '/account/login';
-                </script>
-            }
 	        @{
 
 		        var user = UserManager.GetUserAsync(User).Result;
@@ -45,20 +36,20 @@
                 <li class="nav-item nav-profile">
                     <a href="#" class="nav-link">
 	                    <div class="nav-profile-image">
-                            @if (string.IsNullOrEmpty(@user.Photo))
+                            @if (string.IsNullOrEmpty(@user?.Photo))
                             {
 	                            <img src="~/assets/images/auth/vector-users-icon.jpg" alt="user-profile"/>
                             }
                             else
                             {
-                                <img src="/photos/users/@user.Photo" alt="user-profile" />
+                                <img src="/photos/users/@user?.Photo" alt="user-profile" />
                             }
 		                    
 		                    <span class="login-status online"></span>
 		                    <!--change to offline or busy as needed-->
 	                    </div>
                         <div class="nav-profile-text d-flex flex-column pr-3 text-white">
-                            <span class="font-weight-medium mb-2">@user.UserName</span>
+                            <span class="font-weight-medium mb-2">@user?.UserName</span>
                           
                         </div>
                     </a>
@@ -161,7 +152,7 @@
             </div>
             <nav class="navbar col-lg-12 col-12 p-lg-0 fixed-top d-flex flex-row">
                 <div class="navbar-menu-wrapper d-flex align-items-stretch justify-content-between">
-                    <a class="navbar-brand brand-logo-mini align-self-center d-lg-none" href="index.html"><img src="/assets/images/logo-mini.svg" alt="logo" /></a>
+                    <a class="navbar-brand brand-logo-mini align-self-center d-lg-none" href="/"><img src="/assets/images/logo-mini.svg" alt="logo" /></a>
                     <button class="navbar-toggler navbar-toggler align-self-center mr-2" type="button" data-toggle="minimize">
                         <i class="mdi mdi-menu"></i>
                     </button>
@@ -170,17 +161,17 @@
                        
                         <li class="nav-item nav-profile dropdown border-0">
 	                        <a class="nav-link dropdown-toggle" id="profileDropdown" href="#" data-toggle="dropdown">
-		                        @if (string.IsNullOrEmpty(@user.Photo))
+		                        @if (string.IsNullOrEmpty(@user?.Photo))
 		                        {
                                     <img class="nav-profile-img mr-2" src="~/assets/images/auth/vector-users-icon.jpg" alt="user-profile" />
 
 		                        }
 		                        else
 		                        {
-                                    <img class="nav-profile-img mr-2" alt="user-profile" src="/photos/users/@user.Photo" />
+                                    <img class="nav-profile-img mr-2" alt="user-profile" src="/photos/users/@user?.Photo" />
                                 }
 		                        
-		                        <span class="profile-name">@user.UserName</span>
+		                        <span class="profile-name">@user?.UserName</span>
 	                        </a>
                             <div class="dropdown-menu navbar-dropdown w-100" aria-labelledby="profileDropdown">
 
