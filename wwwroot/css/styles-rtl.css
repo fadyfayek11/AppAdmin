@@ -10165,3 +10165,9 @@
 .categories{
     text-align : end !important;
 }
+#withBreakFast{
+    margin : 2%;
+}
+#withBreakFastLab{
+    margin-right:6%;
+}

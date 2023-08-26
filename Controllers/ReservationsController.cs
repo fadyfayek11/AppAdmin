@@ -38,24 +38,28 @@ namespace App.Admin.Controllers
             return View(reservation);
         }
 
-        // GET: Reservations/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,UserName,UserEmail,PhoneNumber,Status,CheckInDate,CreatedDate")] Reservation reservation)
+        public async Task<IActionResult> Create([FromBody]Reservation reservation)
         {
-            if (ModelState.IsValid)
+           
+            var oldRequest = await  _context.Reservations.FirstOrDefaultAsync(m => m.UserName ==  reservation.UserName &&
+                m.RoomId == reservation.RoomId &&
+                m.PhoneNumber == reservation.PhoneNumber);
+
+            if (oldRequest == null)
             {
-                _context.Add(reservation);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
-            }
-            return View(reservation);
+                _context.Reservations.Add(reservation);
+
+                try
+                {
+	                await _context.SaveChangesAsync();
+				}
+                catch (Exception e)
+                {
+					return Json(new { success = false });
+				}
+			}
+            return Json(new { success = true });
         }
 
       

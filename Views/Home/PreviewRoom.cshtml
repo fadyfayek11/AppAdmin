@@ -78,26 +78,75 @@
                     </div>
                 </div>
             </div> <!-- .col-md-8 -->
-            <div class="col-lg-4 sidebar ftco-animate pl-md-5">
-	            <div class="sidebar-box ftco-animate">
-		            <div class="categories">
-						<h3 data-i18n="features">Features</h3>
-						@foreach (var icons in Model.RoomDetails!.Where(x => x.IsIcon))
-						{
-							<li>
-								<a>@icons.DetailName
-									<span>
-										<img src="@Url.Content("/" + @icons.DetailsDescription.Select(x => x.Description).FirstOrDefault()?.Replace("\\","/"))" alt="Image"  style="max-width:25px;max-height:25px"/>
-									</span>
-								</a>
-							</li>
-						}
-                    </div>
-                </div>
-            </div>
+	        <div class="col-lg-4 sidebar ftco-animate pl-md-5">
+		        <div class="sidebar-box ftco-animate">
+			        <div class="categories">
+				        <h3 data-i18n="features">Features</h3>
+				        @foreach (var icons in Model.RoomDetails!.Where(x => x.IsIcon))
+				        {
+					        <li>
+						        <a>@icons.DetailName
+							        <span>
+								        <img src="@Url.Content("/" + @icons.DetailsDescription.Select(x => x.Description).FirstOrDefault()?.Replace("\\","/"))" alt="Image"  style="max-width:25px;max-height:25px"/>
+							        </span>
+						        </a>
+					        </li>
+				        }
+			        </div>
+		        </div>
+	        </div>
+			<button id="showModalBtn" class="btn btn-success" data-i18n="book">Book it</button>
         </div>
     </div>
 </section> 
+
+
+<!-- The modal -->
+<div id="reservationModal" class="modal fade" role="dialog">
+	<div class="modal-dialog">
+		<!-- Modal content -->
+		<div class="modal-content">
+			<div class="modal-header">
+				<h4 class="modal-title" data-i18n="reservationForm">Reservation Form</h4>
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<form id="reservationForm">
+					<input type="hidden" id="roomId" name="roomId" value="@Model.RoomId">
+
+					<div class="form-group">
+						<label for="userName" data-i18n="userName">>User Name:</label>
+						<input type="text" class="form-control" id="userName" name="userName" required>
+					</div>
+					<div class="form-group">
+						<label for="userEmail" data-i18n="userEmail">>User Email:</label>
+						<input type="email" class="form-control" id="userEmail" name="userEmail">
+					</div>
+					<div class="form-group">
+						<label for="phoneNumber" data-i18n="phone">Phone Number:</label>
+						<input type="tel" class="form-control" id="phoneNumber" name="phoneNumber" required>
+					</div>
+					<div class="form-group form-check">
+						<input type="checkbox" class="form-check-input" id="withBreakFast" name="withBreakFast">
+						<label class="form-check-label" id="withBreakFastLab" for="withBreakFast" data-i18n="breakfast">With Breakfast</label>
+
+						<small id="breakfastNote" class="form-text text-muted text-success" style="display:none" data-i18n="breakfastNote">
+							Note: Room price will increase 30 SAR with breakfast.
+						</small>
+					</div>
+					<div class="form-group">
+						<label for="checkInDate" data-i18n="checkIn">Check-in Date:</label>
+						<input type="date" class="form-control" id="checkInDate" name="checkInDate" required>
+					</div>
+				</form>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal" data-i18n="Close">Close</button>
+				<button type="submit" class="btn btn-primary" form="reservationForm" data-i18n="Submit">Submit Reservation</button>
+			</div>
+		</div>
+	</div>
+</div>
 
 @section Scripts
 {
@@ -112,6 +161,60 @@
 
             // Add 'active' class to the "Rooms" navigation item
             roomsLink.parentElement.classList.add('active');
-        });       
+
+
+
+			$('#showModalBtn').click(function () {
+				$('#reservationModal').modal('show');
+			});
+
+			$('#withBreakFast').change(function () {
+				if (this.checked) {
+					$('#breakfastNote').show();
+				} else {
+					$('#breakfastNote').hide();
+				}
+			});
+
+			$('#reservationForm').submit(function (event) {
+				event.preventDefault();
+				const formData = new FormData(this);
+
+				if (this.checkValidity()) {
+					const userEmail = $('#userEmail').val().trim();					
+					const data = {
+						roomId: $('#roomId').val(),
+						userName: $('#userName').val(),
+						userEmail: userEmail.length === 0 ? 'Nan' : userEmail,
+						withBreakFast: $('#withBreakFast').is(':checked'), 
+						checkInDate: $('#checkInDate').val(),
+						phoneNumber: $('#phoneNumber').val()
+					};
+
+					// Convert data to JSON
+					const jsonData = JSON.stringify(data);
+					// Send data using Ajax
+					$.ajax({
+						url: '/reservation/Create',
+						type: 'POST',
+						data: jsonData,
+						contentType: 'application/json',
+						success: function (data) {
+							if (data.success) {
+								alert('Your reservation request has been sent successfully. Our team will communicate with you.');
+								$('#reservationModal').modal('hide');
+							} else {
+								alert('An error occurred. Please try again later.');
+							}
+						},
+						error: function () {
+							alert('An error occurred. Please try again later.');
+						}
+					});
+				} else {
+					alert('Please fill in all required fields.');
+				}
+			});
+        });
 	</script>
 }

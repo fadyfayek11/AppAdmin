@@ -11,7 +11,7 @@ public class Reservation
 	public string UserName { get; set; }
 
 	[Display(Name = "User Email")]
-	public string UserEmail { get; set; }
+	public string UserEmail { get; set; } = string.Empty;
 	[Display(Name = "Phone Number")]
 	public string PhoneNumber { get; set; }
 

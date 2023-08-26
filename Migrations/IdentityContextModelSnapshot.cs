@@ -43,7 +43,7 @@ namespace App.Admin.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Admins");
+                    b.ToTable("Admins", (string)null);
                 });
 
             modelBuilder.Entity("App.Admin.Models.CMS", b =>
@@ -64,7 +64,7 @@ namespace App.Admin.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Cmses");
+                    b.ToTable("Cmses", (string)null);
                 });
 
             modelBuilder.Entity("App.Admin.Models.DetailsDescription", b =>
@@ -91,7 +91,7 @@ namespace App.Admin.Migrations
 
                     b.HasIndex("RoomDetailsId");
 
-                    b.ToTable("DetailsDescription");
+                    b.ToTable("DetailsDescription", (string)null);
                 });
 
             modelBuilder.Entity("App.Admin.Models.News", b =>
@@ -127,7 +127,7 @@ namespace App.Admin.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("News");
+                    b.ToTable("News", (string)null);
                 });
 
             modelBuilder.Entity("App.Admin.Models.Reservation", b =>
@@ -169,7 +169,7 @@ namespace App.Admin.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("Reservations");
+                    b.ToTable("Reservations", (string)null);
                 });
 
             modelBuilder.Entity("App.Admin.Models.Room", b =>
@@ -220,7 +220,7 @@ namespace App.Admin.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Rooms");
+                    b.ToTable("Rooms", (string)null);
                 });
 
             modelBuilder.Entity("App.Admin.Models.RoomDetails", b =>
@@ -252,7 +252,7 @@ namespace App.Admin.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("RoomDetails");
+                    b.ToTable("RoomDetails", (string)null);
                 });
 
             modelBuilder.Entity("App.Admin.Models.RoomImages", b =>
@@ -277,7 +277,7 @@ namespace App.Admin.Migrations
 
                     b.HasIndex("RoomId");
 
-                    b.ToTable("RoomImages");
+                    b.ToTable("RoomImages", (string)null);
                 });
 
             modelBuilder.Entity("App.Admin.Models.Testimony", b =>
@@ -317,7 +317,7 @@ namespace App.Admin.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Testimonies");
+                    b.ToTable("Testimonies", (string)null);
                 });
 
             modelBuilder.Entity("MarminaAttendance.Identity.ApplicationUser", b =>

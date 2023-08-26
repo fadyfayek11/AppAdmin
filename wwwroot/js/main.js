@@ -117,6 +117,16 @@
 				"roomDetails": "Rooms Details",
 				"rooms": "Rooms",
 				"roomSingle": "Rooms Single",
+				reservationForm: "Reservation Form",
+				userName: "User Name:",
+				breakfast: "With Breakfast",
+				breakfastNote: "Note: Room price will increase 30 SAR with breakfast.",
+				checkIn: "Check-in Date:",
+				phone: "Phone Number:",
+				Close: "Close",
+				Submit: "Submit Reservation",
+				book: "Book it",
+				userEmail: "User Email"
 
 			}
 		},
@@ -229,6 +239,17 @@
 				"roomDetails": "تفاصيل الغرف",
 				"rooms": "الغرف",
 				"roomSingle": "غرفه فرديه",
+				reservationForm: "نموذج الحجز",
+				userName: "اسم المستخدم:",
+				breakfast: "مع وجبة الإفطار",
+				breakfastNote: "ملاحظة: سيتم زيادة سعر الغرفة بقيمة 30 ريال مع وجبة الإفطار.",
+				checkIn: "تاريخ الوصول:",
+				phone: "رقم الهاتف:",
+				Close: "إغلاق",
+				Submit: "إرسال الحجز",
+				book: "احجزها الان",
+				userEmail: "البريد الالكتروني:"
+
 			}
 		}
 	}
