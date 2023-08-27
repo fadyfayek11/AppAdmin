@@ -28,12 +28,28 @@ builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
     options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+ ";
     options.ClaimsIdentity.UserIdClaimType = "UserID";
 }).AddEntityFrameworkStores<IdentityContext>().AddDefaultUI().AddDefaultTokenProviders();
-
+builder.Services.AddCors(options =>
+{
+	options.AddPolicy("AllowAll", builder =>
+	{
+		builder.AllowAnyOrigin()
+			.AllowAnyMethod()
+			.AllowAnyHeader();
+	});
+});
 builder.Services.ConfigureApplicationCookie(options => options.LoginPath = "/Account/Login");
 
 
 var app = builder.Build();
 
+using (var scope = app.Services.CreateAsyncScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<IdentityContext>();
+    if (db.Database.EnsureCreated())
+    {
+        db.Database.Migrate();
+    }
+}
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
@@ -49,11 +65,17 @@ app.UseRouting();
 app.UseAuthentication(); ;
 
 app.UseAuthorization();
+app.UseCors("AllowAll");
 
-app.MapRazorPages();
+
 app.UseEndpoints(endpoints =>
 {
+
 	endpoints.MapControllerRoute(
+        name: "default",
+        pattern: "{controller=Home}/{action=Index}/{id?}");
+
+    endpoints.MapControllerRoute(
 		name: "homeRoot",
 		pattern: "Home",
 		defaults: new { controller = "Home", action = "Index" });
@@ -136,5 +158,5 @@ app.UseEndpoints(endpoints =>
         pattern: "roomImages/{action}/{images?}",
         defaults: new { controller = "RoomImages" });
 });
-
+app.MapRazorPages();
 app.Run();

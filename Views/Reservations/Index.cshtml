@@ -8,7 +8,7 @@
 <div style="margin-left:5%;margin-right:5%">
 	<h1>Reservations requests</h1>
 
-	<table id="reservationTable" class="display" data-ajax="@Url.Action("LoadReservations")">
+	<table id="reservationTable" class="display">
 		<div>
 			<label for="statusFilter">Status:</label>
 			<select id="statusFilter">
@@ -82,9 +82,10 @@
                 serverSide: true,
                 processing: true,
                 ajax: {
-                    url: $('#reservationTable').data('ajax'),
-                    type: 'GET'
-                },
+					url: '@Url.Action("LoadReservations", "Reservations")',
+                    type: 'GET',
+					dataType: 'json'
+				},
                 columns: [
                     {
                         data: 'id'

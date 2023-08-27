@@ -2,10 +2,11 @@
 @model ErrorModel
 @{
     ViewData["Title"] = "Error";
+	Layout = null;
 }
 
-@section Styles
-{
+
+
 	<style>
         * {
         -webkit-box-sizing: border-box;
@@ -45,7 +46,7 @@
         display: inline-block;
         width: 140px;
         height: 140px;
-        background-image: url('assets/images/emoji.png');
+        background-image: url('/assets/images/emoji.png');
         background-size: cover;
         }
 
@@ -96,7 +97,7 @@
         color: #388dbc;
         }
 	</style>
-}
+
 
 <div id="notfound">
 	<div class="notfound">

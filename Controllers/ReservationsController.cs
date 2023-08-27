@@ -86,6 +86,7 @@ namespace App.Admin.Controllers
         {
           return (_context.Reservations?.Any(e => e.Id == id)).GetValueOrDefault();
         }
+        [HttpGet]
         public async Task<IActionResult> LoadReservations()
         {
             var draw = int.Parse(Request.Query["draw"]);

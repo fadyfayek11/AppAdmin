@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="wwwroot\photos\**" />
+    <Content Remove="wwwroot\photos\**" />
+    <EmbeddedResource Remove="wwwroot\photos\**" />
+    <None Remove="wwwroot\photos\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="wwwroot\node_modules\%40babel\runtime\helpers\esm\package.json" />
     <Content Include="wwwroot\node_modules\%40babel\runtime\package.json" />
     <Content Include="wwwroot\node_modules\.package-lock.json" />
@@ -17,10 +24,6 @@
     <Content Include="wwwroot\node_modules\promise-polyfill\package.json" />
     <Content Include="wwwroot\node_modules\regenerator-runtime\package.json" />
     <Content Include="wwwroot\node_modules\sweetalert\package.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="wwwroot\photos\users\" />
   </ItemGroup>
 
   <ItemGroup>
