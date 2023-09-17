@@ -1,0 +1,33 @@
+﻿@model App.Admin.ViewModels.CoverText
+
+@{
+    ViewData["Title"] = "CoverText";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div style="margin-left:5%;margin-right:5%">
+	<h1>Covers</h1>
+	<p>
+		<a asp-action="Create">Add Cover Images</a>
+	</p>
+	<div>
+		<hr />
+		<dl class="row">
+			<dt class = "col-sm-2">
+				@Html.DisplayNameFor(model => model.CoverTextEn)
+			</dt>
+			<dd class = "col-sm-10">
+				@Html.DisplayFor(model => model.CoverTextEn)
+			</dd>
+			<dt class = "col-sm-2">
+				@Html.DisplayNameFor(model => model.CoverImage)
+			</dt>
+			<dd class = "col-sm-10">
+				<img src="@Url.Content("~/" + @Model.CoverImage)" alt="Image" style="max-height:350px;max-width:350px" />
+			</dd>
+		</dl>
+	</div>
+	<div>
+		<a class="btn btn-danger delete-button" data-toggle="modal" data-target="#deleteModal">Delete</a>
+	</div>
+</div>

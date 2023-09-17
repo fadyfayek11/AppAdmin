@@ -30,9 +30,44 @@ namespace App.Admin.Controllers
                           View(await _context.Cmses.Where(x=>x.Key == "OurTeam").ToListAsync()) :
                           Problem("Entity set 'IdentityContext.Cmses'  is null.");
         }
+		public async Task<IActionResult> About()
+		{
+			var coverTextAr = await _context.Cmses.Where(x => x.Key == "CoverTextAr").Select(x=>x.Value).ToListAsync();
+			var coverTextEn = await _context.Cmses.Where(x => x.Key == "CoverTextEn").Select(x=>x.Value).ToListAsync();
+			var coverImages = await _context.Cmses.Where(x => x.Key == "CoverImage").Select(x => x.Value).ToListAsync();
+			var aboutImages = await _context.Cmses.Where(x => x.Key == "AboutImages").Select(x => x.Value).ToListAsync();
+			var aboutTitleEn = await _context.Cmses.Where(x => x.Key == "AboutTitleEn").Select(x=>x.Value).FirstOrDefaultAsync();
+			var aboutTitleAr = await _context.Cmses.Where(x => x.Key == "AboutTitleAr").Select(x => x.Value).FirstOrDefaultAsync();
+			var aboutAr = await _context.Cmses.Where(x => x.Key == "AboutAr").Select(x => x.Value).FirstOrDefaultAsync();
+			var aboutEn = await _context.Cmses.Where(x => x.Key == "AboutEn").Select(x => x.Value).FirstOrDefaultAsync();
 
-       
-        public IActionResult Create()
+			var model = new AboutModel
+			{
+				AboutImages = aboutImages,
+				AboutTitleEn = aboutTitleEn ?? "",
+				AboutTitleAr = aboutTitleAr ?? "",
+				AboutAr = aboutAr ?? "",
+				AboutEn = aboutEn ?? ""
+			};
+			return View(model);
+		}
+		
+		public async Task<IActionResult> CoverText()
+		{
+			var coverTextAr = await _context.Cmses.Where(x => x.Key == "CoverTextAr").Select(x=>x.Value).FirstOrDefaultAsync();
+			var coverTextEn = await _context.Cmses.Where(x => x.Key == "CoverTextEn").Select(x=>x.Value).FirstOrDefaultAsync();
+			var coverImages = await _context.Cmses.Where(x => x.Key == "CoverImage").Select(x => x.Value).FirstOrDefaultAsync();
+
+			var model = new CoverText
+			{
+				CoverTextAr = coverTextAr,
+				CoverTextEn = coverTextEn,
+				CoverImage = coverImages
+			};
+			return View(model);
+		}
+
+		public IActionResult Create()
         {
             return View();
         }

@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection.Emit;
 using App.Admin.Models;
 using Microsoft.AspNetCore.Identity;
+using App.Admin.ViewModels;
 
 namespace MarminaAttendance.Identity
 {
@@ -104,6 +105,7 @@ namespace MarminaAttendance.Identity
         public virtual DbSet<RoomImages> RoomImages { get; set; }
         public virtual DbSet<Testimony> Testimonies { get; set; }
         public virtual DbSet<CMS> Cmses { get; set; }
+        public DbSet<App.Admin.ViewModels.CoverText>? CoverText { get; set; }
 
 
     }
