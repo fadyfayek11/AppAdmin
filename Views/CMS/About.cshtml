@@ -1,12 +1,93 @@
-﻿@{
-	ViewData["Title"] = "Create";
-	Layout = "~/Pages/Shared/_Layout.cshtml";
+﻿@model App.Admin.ViewModels.AboutModel
+
+@{
+    ViewData["Title"] = "About";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+@section Styles {
+    <style>
+        .image-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .image-item {
+            width: calc(25% - 20px); /* 4 images in a row with a little gap */
+            margin: 10px;
+            text-align: center;
+        }
+
+        .image-item img {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+}
+@{
+    var action = Model.Id == 0 ? "Add" : "Edit";
 }
 <div style="margin-left:5%;margin-right:5%">
-	<h1>General info</h1>
+    <h1>About</h1>
 
-	<p>
-		<a asp-action="Create">Add Team Images</a>
-	</p>
+    <div>
+        <h4>About Details</h4>
+        <hr />
+        @if (Model.AboutImages is not null)
+        {
+            <dl class="row">
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.HeaderAr)
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.HeaderAr)
+                </dd>
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.HeaderEn)
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.HeaderEn)
+                </dd>
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.AboutAr)
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.AboutAr)
+                </dd>
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.AboutEn)
+                </dt>
+                <dd class = "col-sm-10">
+                    @Html.DisplayFor(model => model.AboutEn)
+                </dd>
+                <dt class = "col-sm-2">
+                    @Html.DisplayNameFor(model => model.AboutImages)
+                </dt>
+                <dd class = "col-sm-10">
+                    <div class="image-grid">
+                        @foreach (var image in Model.AboutImages)
+                        {
+                            <div class="image-item">
+                                <img src="@Url.Content("~/" + image)" alt="Image"/>
+                            </div>
+                        }
+                    </div>
+                </dd>
 
+            </dl>
+        }
+        else
+        {
+            <div>
+                <h3>No Data Yet</h3>
+            </div>
+        }
+       
+    </div>
+    <div>
+        <a asp-action="EditAbout" asp-route-id="@Model.Id" class="btn btn-info">
+            @action
+        </a> 
+    </div>
 </div>
+

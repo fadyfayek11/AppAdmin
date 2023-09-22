@@ -1,0 +1,46 @@
+﻿@model App.Admin.ViewModels.CoverText
+
+@{
+    ViewData["Title"] = "AddCover";
+    Layout = "~/Pages/Shared/_Layout.cshtml";
+}
+<div style="margin-left:5%;margin-right:5%">
+    <h1>Add Cover</h1>
+
+    <h4>Cover</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="AddCoverText" method="post" enctype="multipart/form-data">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="CoverTextAr" class="control-label"></label>
+                    <input asp-for="CoverTextAr" class="form-control" />
+                    <span asp-validation-for="CoverTextAr" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CoverTextEn" class="control-label"></label>
+                    <input asp-for="CoverTextEn" class="form-control" />
+                    <span asp-validation-for="CoverTextEn" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="CoverImage" class="control-label"></label>
+                    <input asp-for="CoverImage" type="file" class="form-control" accept="image/*"/>
+                    <span asp-validation-for="CoverImage" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div>
+        <a asp-action="CoverText">Back to List</a>
+    </div>
+</div>
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore;
-using System.Reflection.Emit;
-using App.Admin.Models;
+﻿using App.Admin.Models;
+using MarminaAttendance.Identity;
 using Microsoft.AspNetCore.Identity;
-using App.Admin.ViewModels;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 
-namespace MarminaAttendance.Identity
+namespace App.Admin.Identity
 {
     public class IdentityContext : IdentityDbContext<ApplicationUser>
     {
@@ -79,15 +78,15 @@ namespace MarminaAttendance.Identity
 				}
 			);
 
-			builder.Entity<Admin>().HasData(
-				new Admin
+			builder.Entity<Models.Admin>().HasData(
+				new Models.Admin
 				{
 					Id = 1,
 					IsRoot = false,
 					CreatedDate = default,
 					UserId = "1"
 				},
-				new Admin
+				new Models.Admin
 				{
 					Id = 2,
 					IsRoot = true,
@@ -97,7 +96,7 @@ namespace MarminaAttendance.Identity
 			);
 
         }
-        public virtual DbSet<Admin> Admins { get; set; }
+        public virtual DbSet<Models.Admin> Admins { get; set; }
         public virtual DbSet<Room> Rooms { get; set; }
         public virtual DbSet<News> News { get; set; }
         public virtual DbSet<Reservation> Reservations { get; set; }
@@ -105,9 +104,6 @@ namespace MarminaAttendance.Identity
         public virtual DbSet<RoomImages> RoomImages { get; set; }
         public virtual DbSet<Testimony> Testimonies { get; set; }
         public virtual DbSet<CMS> Cmses { get; set; }
-        public DbSet<App.Admin.ViewModels.CoverText>? CoverText { get; set; }
-
-
     }
 
    

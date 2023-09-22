@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using App.Admin.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using App.Admin.Models;
 using App.Admin.ViewModels;
-using MarminaAttendance.Identity;
-using Microsoft.AspNetCore.Hosting;
+using System;
 
 namespace App.Admin.Controllers
 {
@@ -32,41 +27,151 @@ namespace App.Admin.Controllers
         }
 		public async Task<IActionResult> About()
 		{
-			var coverTextAr = await _context.Cmses.Where(x => x.Key == "CoverTextAr").Select(x=>x.Value).ToListAsync();
-			var coverTextEn = await _context.Cmses.Where(x => x.Key == "CoverTextEn").Select(x=>x.Value).ToListAsync();
-			var coverImages = await _context.Cmses.Where(x => x.Key == "CoverImage").Select(x => x.Value).ToListAsync();
-			var aboutImages = await _context.Cmses.Where(x => x.Key == "AboutImages").Select(x => x.Value).ToListAsync();
-			var aboutTitleEn = await _context.Cmses.Where(x => x.Key == "AboutTitleEn").Select(x=>x.Value).FirstOrDefaultAsync();
-			var aboutTitleAr = await _context.Cmses.Where(x => x.Key == "AboutTitleAr").Select(x => x.Value).FirstOrDefaultAsync();
-			var aboutAr = await _context.Cmses.Where(x => x.Key == "AboutAr").Select(x => x.Value).FirstOrDefaultAsync();
-			var aboutEn = await _context.Cmses.Where(x => x.Key == "AboutEn").Select(x => x.Value).FirstOrDefaultAsync();
-
-			var model = new AboutModel
-			{
-				AboutImages = aboutImages,
-				AboutTitleEn = aboutTitleEn ?? "",
-				AboutTitleAr = aboutTitleAr ?? "",
-				AboutAr = aboutAr ?? "",
-				AboutEn = aboutEn ?? ""
-			};
-			return View(model);
-		}
 		
-		public async Task<IActionResult> CoverText()
-		{
-			var coverTextAr = await _context.Cmses.Where(x => x.Key == "CoverTextAr").Select(x=>x.Value).FirstOrDefaultAsync();
-			var coverTextEn = await _context.Cmses.Where(x => x.Key == "CoverTextEn").Select(x=>x.Value).FirstOrDefaultAsync();
-			var coverImages = await _context.Cmses.Where(x => x.Key == "CoverImage").Select(x => x.Value).FirstOrDefaultAsync();
+            var about = await _context.Cmses.FirstOrDefaultAsync(x => x.Key == "About");
 
-			var model = new CoverText
+            if (about == null)
+            {
+	            return View(new AboutModel());
+            }
+            var model = new AboutModel
 			{
-				CoverTextAr = coverTextAr,
-				CoverTextEn = coverTextEn,
-				CoverImage = coverImages
-			};
+                Id = about.Id,
+                AboutImages = new List<string>
+                {
+                    about.Value.Split("#")[4],
+                    about.Value.Split("#")[5],
+                    about.Value.Split("#")[6],
+                }, 
+                HeaderAr = about.Value.Split("#")[0],
+                HeaderEn = about.Value.Split("#")[1],
+                AboutAr = about.Value.Split("#")[2],
+				AboutEn = about.Value.Split("#")[3]
+            };
 			return View(model);
 		}
+        public async Task<IActionResult> EditAbout(int id)
+        {
+            var about = await _context.Cmses.FirstOrDefaultAsync(x => x.Id == id);
 
+            if (about == null)
+            {
+                return View(new EditAbout());
+            }
+            try
+            {
+                var model = new EditAbout
+                {
+                    Id = about.Id,
+                    HeaderAr = about.Value.Split("#")[0],
+                    HeaderEn = about.Value.Split("#")[1],
+                    AboutAr = about.Value.Split("#")[2],
+                    AboutEn = about.Value.Split("#")[3]
+                };
+                return View(model);
+            }
+            catch (Exception)
+            {
+
+                return View();
+            }
+           
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> EditAbout([FromForm] EditAbout about)
+        {
+            if (ModelState.IsValid)
+            {
+                var image1 = await UploadImages(about.Image1);
+                var image2 = await UploadImages(about.Image2);
+                var image3 = await UploadImages(about.Image3);
+
+                var newCover = new CMS
+                {
+                    Id = about.Id,
+                    Key = "About",
+                    Value = about.HeaderAr + "#" + about.HeaderEn + "#" + about.AboutAr + "#" + about.AboutEn + "#" + image1 + "#" + image2 + "#" + image3,
+                };
+           
+                _context.Cmses.Update(newCover);
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction(nameof(About));
+            }
+
+            return View(about);
+        }
+
+        private async Task<string> UploadImages(IFormFile image)
+        {
+            string imageName = Guid.NewGuid().ToString() + Path.GetExtension(image.FileName);
+            string imagePath = Path.Combine("uploads", "About", imageName);
+            string filePath = Path.Combine(_webHostEnvironment.WebRootPath, imagePath);
+
+            string directoryPath = Path.GetDirectoryName(filePath);
+            if (!Directory.Exists(directoryPath))
+            {
+                Directory.CreateDirectory(directoryPath);
+            }
+
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                await image.CopyToAsync(stream);
+            }
+            return imagePath;
+        }
+        public async Task<IActionResult> CoverText()
+		{			
+			var coverImages = await _context.Cmses.Where(x => x.Key == "CoverText").ToListAsync();
+            
+            var model = coverImages.Select(x => new CoverTexts
+            {
+                Id = x.Id,
+                CoverTextAr = x.Value.Split("#")[0],
+                CoverTextEn = x.Value.Split("#")[1],
+                CoverImage = x.Value.Split("#")[2]
+            });
+			return View(model);
+		}
+        public IActionResult AddCoverText()
+        {
+            return View();
+        }
+        [HttpPost]
+		[ValidateAntiForgeryToken]
+		public async Task<IActionResult> AddCoverText([FromForm] CoverText covers)
+		{
+			if (ModelState.IsValid)
+			{
+                string imageName = Guid.NewGuid().ToString() + Path.GetExtension(covers.CoverImage.FileName);
+				string imagePath = Path.Combine("uploads", "Covers", imageName);
+				string filePath = Path.Combine(_webHostEnvironment.WebRootPath, imagePath);
+
+				string directoryPath = Path.GetDirectoryName(filePath);
+				if (!Directory.Exists(directoryPath))
+				{
+					Directory.CreateDirectory(directoryPath);
+				}
+
+				using (var stream = new FileStream(filePath, FileMode.Create))
+				{
+					await covers.CoverImage.CopyToAsync(stream);
+				}
+
+				var newCover = new CMS
+				{
+                    Key = "CoverText",
+                    Value = covers.CoverTextAr + "#" + covers.CoverTextEn + "#" +imagePath,
+				};
+				await _context.Cmses.AddAsync(newCover);
+				await _context.SaveChangesAsync();
+
+				return RedirectToAction(nameof(CoverText));
+			}
+
+			return View(covers);
+		}
 		public IActionResult Create()
         {
             return View();
@@ -128,7 +233,7 @@ namespace App.Admin.Controllers
             }
             
             await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return Json(new { success = true });
         }
 
         private bool CMSExists(int id)

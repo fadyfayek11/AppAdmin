@@ -1,16 +1,14 @@
-﻿
-using App.Admin.Models;
-using System.ComponentModel.DataAnnotations;
-using System.Xml.Linq;
-
-namespace App.Admin.ViewModels
+﻿namespace App.Admin.ViewModels
 {
 	public class HomeViewModel
 	{
 		public List<TestimonyHomeViewModel> Testimonies { get; set; }
 		public List<RoomsHomeViewModel>? Rooms { get; set; }
 		public List<TeamHomeViewModel> Team { get; set; }
-	}
+		public List<CoverTexts>? Covers { get; set; }
+		public AboutModel? About { get; set; }
+
+    }
 
 	public class TestimonyHomeViewModel
 	{

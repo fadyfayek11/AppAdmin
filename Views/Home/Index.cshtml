@@ -7,35 +7,57 @@
 }
 
 <div class="hero">
-	<section class="home-slider owl-carousel">
-		<div class="slider-item" style="background-image:url(images/bg_1.jpg);">
-			<div class="overlay"></div>
-			<div class="container">
-				<div class="row no-gutters slider-text align-items-center justify-content-end">
-					<div class="col-md-6 ftco-animate">
-						<div class="text">
-							<h2 data-i18n="slogan1">More than a hotel... an experience</h2>
-							<h1 class="mb-3" data-i18n="slogan2">Hotel for the whole family, all year round.</h1>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+    <section class="home-slider owl-carousel">
+		@if (Model.Covers is not null && Model.Covers.Any())
+		{
+		    foreach (var cover in Model.Covers)
+		    {
+		        <div class="slider-item" style="background-image:url(images/@cover.CoverImage);">
+                    <div class="overlay"></div>
+                    <div class="container">
+                        <div class="row no-gutters slider-text align-items-center justify-content-end">
+                            <div class="col-md-6 ftco-animate">
+                                <div class="text">
+                                    <h2 data-i18n="slogan1">More than a hotel... an experience</h2>
+                                    <h1 class="mb-3" >@cover.CoverTextAr</h1>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+		    }
+		}
+		else
+		{
+		    <div class="slider-item" style="background-image:url(images/bg_1.jpg);">
+                <div class="overlay"></div>
+                <div class="container">
+                    <div class="row no-gutters slider-text align-items-center justify-content-end">
+                        <div class="col-md-6 ftco-animate">
+                            <div class="text">
+                                <h2 data-i18n="slogan1">More than a hotel... an experience</h2>
+                                <h1 class="mb-3" data-i18n="slogan2">Hotel for the whole family, all year round.</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-		<div class="slider-item" style="background-image:url(images/bg_2.jpg);">
-			<div class="overlay"></div>
-			<div class="container">
-				<div class="row no-gutters slider-text align-items-center justify-content-end">
-					<div class="col-md-6 ftco-animate">
-						<div class="text">
-							<h2 data-i18n="hotelName">Sanbat Platinum Hotel Resort</h2>
-							<h1 class="mb-3" data-i18n="slogan3">It feels like staying in your own home.</h1>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
+		    <div class="slider-item" style="background-image:url(images/bg_2.jpg);">
+                <div class="overlay"></div>
+                <div class="container">
+                    <div class="row no-gutters slider-text align-items-center justify-content-end">
+                        <div class="col-md-6 ftco-animate">
+                            <div class="text">
+                                <h2 data-i18n="hotelName">Sanbat Platinum Hotel Resort</h2>
+                                <h1 class="mb-3" data-i18n="slogan3">It feels like staying in your own home.</h1>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+		}
+    </section>
 </div>
 <section class="ftco-section">
 	<div class="container">
@@ -112,37 +134,67 @@
 
 <section class="ftco-section ftco-wrap-about ftco-no-pt ftco-no-pb">
 	<div class="container">
-		<div class="row no-gutters">
-			<div class="col-md-7 order-md-last d-flex">
-				<div class="img img-1 mr-md-2 ftco-animate" style="background-image: url(images/about-1.jpg);">
-				</div>
-				<div class="img img-2 ml-md-2 ftco-animate" style="background-image: url(images/about-2.jpg);">
-				</div>
-			</div>
-			<div class="col-md-5 wrap-about pb-md-3 ftco-animate pr-md-5 pb-md-5 pt-md-4">
-				<div class="heading-section mb-4 my-5 my-md-0">
-					<span class="subheading" data-i18n="about">About Sanbat Platinum Hotel</span>
-					<h2 class="mb-4" data-i18n="recommend">Sanbat Platinum Hotel the Most Recommended Hotel All Over Saudi Arabia</h2>
-				</div>
-				<p data-i18n="aboutInfo">
-					Explore Jazan through our hotel (Sanbat Platinum)
-					Welcome to Sanbat Platinum Hotel in Jizan, Kingdom of Saudi Arabia.
-					The hotel enjoys a strategic location, as it is located in the central area, next to the Sky Mall complex and the street of restaurants. It is 3 km from the airport and 2.50 km from Jizan port.
-					The hotel includes sixty-two modern hotel units, including standard rooms, bridal suites, family suites, and rooms for people of determination.
-					The hotel contains several services (restaurant, coffee shop, laundry) and 24-hour housekeeping, thus providing convenience for guests, especially business guests. The hotel has a health club and a shopping center, giving comfort and effort to families. The complimentary breakfast for hotel guests can be enjoyed in the restaurant (Teen and Olive), where the comfort is. The hotel provides free internet in the rooms.
-				</p>
-			</div>
-		</div>
+        <div class="row no-gutters">
+			@if (Model.About.AboutAr is not null)
+			{
+			    <div class="col-md-7 order-md-last d-flex">
+					<div class="img img-1 mr-md-2 ftco-animate" style="background-image: url(@Model.About.AboutImages[0].Replace('\\','/'));">
+                    </div>
+					<div class="img img-2 ml-md-2 ftco-animate" style="background-image: url(@Model.About.AboutImages[1].Replace('\\','/'));">
+                    </div>
+                </div>
+			    <div class="col-md-5 wrap-about pb-md-3 ftco-animate pr-md-5 pb-md-5 pt-md-4">
+                    <div class="heading-section mb-4 my-5 my-md-0">
+                        <span class="subheading" data-i18n="about">About Sanbat Platinum Hotel</span>
+                        <h2 class="mb-4">@Model.About.HeaderAr</h2>
+                    </div>
+                    <p>
+						@Model.About.AboutAr
+                    </p>
+                </div>
+			}
+			else
+			{
+			    <div class="col-md-7 order-md-last d-flex">
+                    <div class="img img-1 mr-md-2 ftco-animate" style="background-image: url(images/about-1.jpg);">
+                    </div>
+                    <div class="img img-2 ml-md-2 ftco-animate" style="background-image: url(images/about-2.jpg);">
+                    </div>
+                </div>
+			    <div class="col-md-5 wrap-about pb-md-3 ftco-animate pr-md-5 pb-md-5 pt-md-4">
+                    <div class="heading-section mb-4 my-5 my-md-0">
+                        <span class="subheading" data-i18n="about">About Sanbat Platinum Hotel</span>
+                        <h2 class="mb-4" data-i18n="recommend">Sanbat Platinum Hotel the Most Recommended Hotel All Over Saudi Arabia</h2>
+                    </div>
+                    <p data-i18n="aboutInfo">
+                        Explore Jazan through our hotel (Sanbat Platinum)
+                        Welcome to Sanbat Platinum Hotel in Jizan, Kingdom of Saudi Arabia.
+                        The hotel enjoys a strategic location, as it is located in the central area, next to the Sky Mall complex and the street of restaurants. It is 3 km from the airport and 2.50 km from Jizan port.
+                        The hotel includes sixty-two modern hotel units, including standard rooms, bridal suites, family suites, and rooms for people of determination.
+                        The hotel contains several services (restaurant, coffee shop, laundry) and 24-hour housekeeping, thus providing convenience for guests, especially business guests. The hotel has a health club and a shopping center, giving comfort and effort to families. The complimentary breakfast for hotel guests can be enjoyed in the restaurant (Teen and Olive), where the comfort is. The hotel provides free internet in the rooms.
+                    </p>
+                </div>
+			}
+        </div>
 	</div>
 </section>
 
 <section class="testimony-section">
 	<div class="container">
 		<div class="row no-gutters ftco-animate justify-content-center">
-			<div class="col-md-5 d-flex">
-				<div class="testimony-img aside-stretch-2" style="background-image: url(images/testimony-img.jpg);">
-				</div>
-			</div>
+            <div class="col-md-5 d-flex">
+                @if (Model.About.AboutAr is not null)
+                {
+					<div class="testimony-img aside-stretch-2" style="background-image: url(@Model.About.AboutImages[2].Replace('\\','/'));">
+                    </div>
+                }
+				else
+				{
+					<div class="testimony-img aside-stretch-2" style="background-image: url(images/testimony-img.jpg);">
+					</div>
+				}
+                
+            </div>
 			<div class="col-md-7 py-5 pl-md-5">
 				<div class="py-md-5">
 					<div class="heading-section ftco-animate mb-4">

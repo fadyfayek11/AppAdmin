@@ -1,4 +1,5 @@
-﻿using App.Admin.Models;
+﻿using App.Admin.Identity;
+using App.Admin.Models;
 using App.Admin.ViewModels;
 using MarminaAttendance.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -44,11 +45,42 @@ namespace App.Admin.Controllers
 				UserJob = x.UserJob
 			}).ToListAsync();
 
-			var home = new HomeViewModel
+            var coverImages = await _context.Cmses.Where(x => x.Key == "CoverText").ToListAsync();
+            var coverModel = coverImages.Select(x => new CoverTexts
+            {
+                Id = x.Id,
+                CoverTextAr = lang == "ar" ? x.Value.Split("#")[0] :  x.Value.Split("#")[1],
+                CoverTextEn = "",
+                CoverImage = x.Value.Split("#")[2]
+            }).ToList();
+
+            var about = await _context.Cmses.FirstOrDefaultAsync(x => x.Key == "About");
+            var aboutModel = new AboutModel();
+            if (about is not null)
+            {
+                aboutModel = new AboutModel
+                {
+                    Id = about.Id,
+                    AboutImages = new List<string>
+                    {
+                        about.Value.Split("#")[4],
+                        about.Value.Split("#")[5],
+                        about.Value.Split("#")[6],
+                    },
+                    HeaderAr = lang == "ar" ? about.Value.Split("#")[0] : about.Value.Split("#")[1],
+                    HeaderEn = "",
+                    AboutAr = lang == "ar" ? about.Value.Split("#")[2] : about.Value.Split("#")[3],
+                    AboutEn = ""
+                };
+            }
+            
+            var home = new HomeViewModel
 			{
 				Testimonies = testimonies,
 				Rooms = rooms,
-				Team = team
+				Team = team,
+                Covers = coverModel,
+                About = aboutModel
 			};
 			return View(home);
         }
@@ -136,11 +168,32 @@ namespace App.Admin.Controllers
                 UserJob = x.UserJob
             }).ToListAsync();
 
+            var about = await _context.Cmses.FirstOrDefaultAsync(x => x.Key == "About");
+            var aboutModel = new AboutModel();
+            if (about is not null)
+            {
+                aboutModel = new AboutModel
+                {
+                    Id = about.Id,
+                    AboutImages = new List<string>
+                    {
+                        about.Value.Split("#")[4],
+                        about.Value.Split("#")[5],
+                        about.Value.Split("#")[6],
+                    },
+                    HeaderAr = lang == "ar" ? about.Value.Split("#")[0] : about.Value.Split("#")[1],
+                    HeaderEn = "",
+                    AboutAr = lang == "ar" ? about.Value.Split("#")[2] : about.Value.Split("#")[3],
+                    AboutEn = ""
+                };
+            }
             var home = new HomeViewModel
             {
                 Testimonies = testimonies,
                 Rooms = null,
-                Team = team
+                Team = team,
+                Covers = null,
+                About = aboutModel
             };
             return View(home);
 		}

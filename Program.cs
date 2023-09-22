@@ -1,3 +1,4 @@
+using App.Admin.Identity;
 using MarminaAttendance.Identity;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
@@ -42,14 +43,14 @@ builder.Services.ConfigureApplicationCookie(options => options.LoginPath = "/Acc
 
 var app = builder.Build();
 
-using (var scope = app.Services.CreateAsyncScope())
-{
-    var db = scope.ServiceProvider.GetRequiredService<IdentityContext>();
-    if (db.Database.EnsureCreated())
-    {
-        db.Database.Migrate();
-    }
-}
+//using (var scope = app.Services.CreateAsyncScope())
+//{
+//    var db = scope.ServiceProvider.GetRequiredService<IdentityContext>();
+//    if (db.Database.EnsureCreated())
+//    {
+//        db.Database.Migrate();
+//    }
+//}
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
