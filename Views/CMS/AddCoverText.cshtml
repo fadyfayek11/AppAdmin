@@ -13,11 +13,25 @@
         <div class="col-md-4">
             <form asp-action="AddCoverText" method="post" enctype="multipart/form-data">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                
                 <div class="form-group">
+                    <label asp-for="HeaderAr" class="control-label"></label>
+                    <input asp-for="HeaderAr" class="form-control" />
+                    <span asp-validation-for="HeaderAr" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="HeaderEn" class="control-label"></label>
+                    <input asp-for="HeaderEn" class="form-control" />
+                    <span asp-validation-for="HeaderEn" class="text-danger"></span>
+                </div>
+
+                 <div class="form-group">
                     <label asp-for="CoverTextAr" class="control-label"></label>
                     <input asp-for="CoverTextAr" class="form-control" />
                     <span asp-validation-for="CoverTextAr" class="text-danger"></span>
                 </div>
+
                 <div class="form-group">
                     <label asp-for="CoverTextEn" class="control-label"></label>
                     <input asp-for="CoverTextEn" class="form-control" />

@@ -49,9 +49,11 @@ namespace App.Admin.Controllers
             var coverModel = coverImages.Select(x => new CoverTexts
             {
                 Id = x.Id,
-                CoverTextAr = lang == "ar" ? x.Value.Split("#")[0] :  x.Value.Split("#")[1],
+                HeaderAr = lang == "ar" ? x.Value.Split("#")[0] : x.Value.Split("#")[1],
+                HeaderEn = "",
+				CoverTextAr = lang == "ar" ? x.Value.Split("#")[2] :  x.Value.Split("#")[3],
                 CoverTextEn = "",
-                CoverImage = x.Value.Split("#")[2]
+                CoverImage = x.Value.Split("#")[4]
             }).ToList();
 
             var about = await _context.Cmses.FirstOrDefaultAsync(x => x.Key == "About");

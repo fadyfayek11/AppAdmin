@@ -28,6 +28,8 @@ public class EditAbout
 public class CoverTexts
 {
     public int Id { get; set; }
+    public string HeaderAr { get; set; }
+    public string HeaderEn { get; set; }
     public string CoverTextAr { get; set; }
 	public string CoverTextEn { get; set; }
 	public string CoverImage { get; set; }
@@ -35,6 +37,8 @@ public class CoverTexts
 
 public class CoverText
 {
+	public string HeaderAr { get; set; }
+	public string HeaderEn { get; set; }
 	public string CoverTextAr { get; set; }
 	public string CoverTextEn { get; set; }
 	public IFormFile CoverImage { get; set; }

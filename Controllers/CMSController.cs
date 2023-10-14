@@ -128,9 +128,11 @@ namespace App.Admin.Controllers
             var model = coverImages.Select(x => new CoverTexts
             {
                 Id = x.Id,
-                CoverTextAr = x.Value.Split("#")[0],
-                CoverTextEn = x.Value.Split("#")[1],
-                CoverImage = x.Value.Split("#")[2]
+                HeaderAr = x.Value.Split("#")[0],
+                HeaderEn = x.Value.Split("#")[1],
+                CoverTextAr = x.Value.Split("#")[2],
+                CoverTextEn = x.Value.Split("#")[3],
+                CoverImage = x.Value.Split("#")[4]
             });
 			return View(model);
 		}
@@ -162,7 +164,7 @@ namespace App.Admin.Controllers
 				var newCover = new CMS
 				{
                     Key = "CoverText",
-                    Value = covers.CoverTextAr + "#" + covers.CoverTextEn + "#" +imagePath,
+                    Value = covers.HeaderAr + "#" + covers.HeaderEn + "#" + covers.CoverTextAr + "#" + covers.CoverTextEn + "#" + imagePath,
 				};
 				await _context.Cmses.AddAsync(newCover);
 				await _context.SaveChangesAsync();

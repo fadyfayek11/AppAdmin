@@ -19,7 +19,13 @@
 				<th>
 					@Html.DisplayNameFor(model => model.Id)
 				</th>
-				<th>
+                <th>
+                    @Html.DisplayNameFor(model => model.HeaderAr)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.HeaderEn)
+                </th>
+                <th>
 					@Html.DisplayNameFor(model => model.CoverTextAr)
 				</th>
 				<th>
@@ -38,7 +44,13 @@
 					<td>
 						@Html.DisplayFor(modelItem => item.Id)
 					</td>
-					<td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HeaderAr)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.HeaderEn)
+                    </td>
+                    <td>
 						@Html.DisplayFor(modelItem => item.CoverTextAr)
 					</td>
                     <td>
