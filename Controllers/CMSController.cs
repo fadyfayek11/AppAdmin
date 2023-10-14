@@ -226,7 +226,7 @@ namespace App.Admin.Controllers
         {
             if (_context.Cmses == null)
             {
-                return Problem("Entity set 'IdentityContext.Cms'  is null.");
+                return Problem("Entity set 'IdentityContext.Cms' is null.");
             }
             var cMS = await _context.Cmses.FindAsync(id);
             if (cMS != null)
