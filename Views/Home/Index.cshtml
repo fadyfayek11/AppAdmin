@@ -12,7 +12,7 @@
 		{
 		    foreach (var cover in Model.Covers)
 		    {
-		        <div class="slider-item" style="background-image:url(images/@cover.CoverImage);">
+				<div class="slider-item" style="background-image:url(@cover.CoverImage.Replace('\\','/'));">
                     <div class="overlay"></div>
                     <div class="container">
                         <div class="row no-gutters slider-text align-items-center justify-content-end">
